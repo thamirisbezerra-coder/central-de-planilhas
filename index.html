@@ -241,9 +241,42 @@
                     <p class="text-gray-600 mb-4 text-sm">Acompanhamento de pedidos enviados por segmento.</p>
                 </div>
                 <div class="mt-auto pt-4 space-y-2">
-                     <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Aromas Doce</a>
-                    <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Cárneos</a>
-                     <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Sorvetes</a>
+                     <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">🍰</span>
+                            <span>Aromas Doce</span>
+                        </span>
+                     </a>
+                     <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">🥨</span>
+                            <span>Aromas Salgados</span>
+                        </span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">🥩</span>
+                            <span>Cárneos</span>
+                        </span>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1oN6p-BNH7rFj4n3OKeDXVUFdYBRCbrqC5SUTmShw9Rw/edit?gid=891834841#gid=891834841" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">🧀</span>
+                            <span>Lácteos</span>
+                        </span>
+                    </a>
+                     <a href="https://docs.google.com/spreadsheets/d/13azWh7gS4mbWNmJXW9kN1Ull2J54GtdnQ_3fInK3Ss0/edit?gid=765793117#gid=765793117" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">💊</span>
+                            <span>Nutracêuticos</span>
+                        </span>
+                    </a>
+                     <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
+                        <span class="flex items-center justify-center space-x-2">
+                            <span class="text-lg">🍦</span>
+                            <span>Sorvetes</span>
+                        </span>
+                    </a>
                 </div>
             </div>
             
@@ -421,7 +454,7 @@
             // Carrega as férias salvas do localStorage ou inicia um array vazio
             let vacations = JSON.parse(localStorage.getItem('setorAmostrasFerias')) || [];
             let nameColors = JSON.parse(localStorage.getItem('setorAmostrasNameColors')) || {};
-            const colorPalette = ['#fecaca', '#bbf7d0', '#bfdbfe', '#e9d5ff', '#fbcfe8', '#c7d2fe', '#99f6e4']; // red, green, blue, purple, pink, indigo, teal
+            const colorPalette = ['#fecaca', '#bbf7do', '#bfdbfe', '#e9d5ff', '#fbcfe8', '#c7d2fe', '#99f6e4']; // red, green, blue, purple, pink, indigo, teal
             let nextColorIndex = Object.keys(nameColors).length % colorPalette.length;
 
             function getColorForName(name) {
@@ -538,6 +571,7 @@
 
 </body>
 </html>
+
 
 
 
