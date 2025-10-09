@@ -555,7 +555,6 @@
             const clockEl = document.getElementById('clock');
             const weatherEl = document.getElementById('weather');
             const greetingMessageEl = document.getElementById('greeting-message');
-            const greetingBanner = document.getElementById('dynamic-greeting-banner');
 
             // 1. Relógio
             function updateClock() {
@@ -566,11 +565,11 @@
             updateClock();
             setInterval(updateClock, 1000);
 
-            // 2. Saudação e Banner
+            // 2. Saudação
             const currentHour = new Date().getHours();
             let greeting = '';
             let icon = '';
-
+            
             if (currentHour >= 5 && currentHour < 12) {
                 greeting = 'Bom dia, equipe!';
                 icon = '☀️';
@@ -804,11 +803,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
