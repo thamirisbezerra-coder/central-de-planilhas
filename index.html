@@ -569,33 +569,20 @@
             // 2. Saudação e Banner
             const currentHour = new Date().getHours();
             let greeting = '';
-            let bannerGreeting = '';
             let icon = '';
-            let bannerBgClass = '';
 
             if (currentHour >= 5 && currentHour < 12) {
                 greeting = 'Bom dia, equipe!';
                 icon = '☀️';
-                bannerGreeting = 'Tenham um ótimo dia de trabalho!';
-                bannerBgClass = 'bg-gradient-to-r from-yellow-400 to-orange-400';
             } else if (currentHour >= 12 && currentHour < 18) {
                 greeting = 'Boa tarde, equipe!';
                 icon = '⛅️';
-                bannerGreeting = 'Tenham uma ótima tarde!';
-                bannerBgClass = 'bg-gradient-to-r from-cyan-400 to-blue-500';
             } else {
                 greeting = 'Boa noite, equipe!';
                 icon = '🌙';
-                if(greetingBanner) greetingBanner.style.display = 'none';
             }
-            
             if(greetingMessageEl) greetingMessageEl.innerHTML = `<span class="mr-2 text-2xl">${icon}</span> ${greeting}`;
             
-            if (bannerBgClass && greetingBanner) {
-                greetingBanner.className += ' ' + bannerBgClass;
-                greetingBanner.innerHTML = `<h2 class="text-3xl font-bold text-shadow">${bannerGreeting}</h2>`;
-            }
-
             // 3. Previsão do Tempo
             function getWeatherInfo(code) {
                 switch (code) {
@@ -817,7 +804,6 @@
     </script>
 </body>
 </html>
-
 
 
 
