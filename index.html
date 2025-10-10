@@ -725,21 +725,29 @@
                 });
                 
                 if(cancelEventBtn) cancelEventBtn.addEventListener('click', () => addEventModal.classList.add('hidden'));
+                
                 if(saveEventBtn) saveEventBtn.addEventListener('click', async () => {
                     const name = personNameInput.value.trim();
                     const startDate = startDateInput.value;
                     const endDate = endDateInput.value;
                     
-                    if (name && startDate && endDate && endDate >= startDate) {
-                        saveEventBtn.disabled = true;
-                        saveEventBtn.textContent = "Salvando...";
+                    if (!name || !startDate || !endDate || endDate < startDate) {
+                        console.error('Dados inválidos. Verifique se todos os campos estão preenchidos e se a data final é igual ou posterior à data inicial.');
+                        return;
+                    }
+
+                    saveEventBtn.disabled = true;
+                    saveEventBtn.textContent = "Salvando...";
+
+                    try {
                         await getColorForName(name);
                         await addDoc(collection(db, vacationsCollectionPath), { name, startDate, endDate, ownerId: userId });
                         addEventModal.classList.add('hidden');
+                    } catch (error) {
+                        console.error("Erro ao salvar as férias no Firebase:", error);
+                    } finally {
                         saveEventBtn.disabled = false;
                         saveEventBtn.textContent = "Salvar";
-                    } else {
-                        console.error('Dados inválidos para salvar as férias.');
                     }
                 });
 
@@ -747,13 +755,21 @@
                     vacationIdToDelete = null;
                     deleteConfirmModal.classList.add('hidden');
                 });
+
                 if(confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', async () => {
                     if (vacationIdToDelete) {
                         confirmDeleteBtn.disabled = true;
-                        await deleteDoc(doc(db, vacationsCollectionPath, vacationIdToDelete));
-                        vacationIdToDelete = null;
-                        deleteConfirmModal.classList.add('hidden');
-                        confirmDeleteBtn.disabled = false;
+                        confirmDeleteBtn.textContent = "Excluindo...";
+                        try {
+                            await deleteDoc(doc(db, vacationsCollectionPath, vacationIdToDelete));
+                            vacationIdToDelete = null;
+                            deleteConfirmModal.classList.add('hidden');
+                        } catch (error) {
+                            console.error("Erro ao excluir as férias:", error);
+                        } finally {
+                            confirmDeleteBtn.disabled = false;
+                            confirmDeleteBtn.textContent = "Excluir";
+                        }
                     }
                 });
 
@@ -775,6 +791,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
