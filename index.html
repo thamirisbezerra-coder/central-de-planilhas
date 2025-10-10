@@ -491,334 +491,293 @@
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURAÇÃO DO FIREBASE
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'planilhas-amostras-dev';
-        const firebaseConfig = JSON.parse(
-            typeof __firebase_config !== 'undefined' 
-            ? __firebase_config 
-            : '{}' // Em ambiente local, cole a sua config do Firebase aqui
-        );
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        // --- VARIÁVEIS GLOBAIS ---
-        let userId = null;
-        const vacationsCollectionPath = `/artifacts/${appId}/public/data/vacations`;
-        const colorsDocPath = `/artifacts/${appId}/public/data/config/nameColors`;
-        let vacations = [];
-        let nameColors = {};
-
-        function setupRealtimeListeners() {
-            onSnapshot(doc(db, colorsDocPath), (docSnap) => {
-                nameColors = docSnap.exists() ? docSnap.data() : {};
-                if (window.renderCalendar) window.renderCalendar();
-            });
-            
-            onSnapshot(collection(db, vacationsCollectionPath), (snapshot) => {
-                vacations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                if (window.renderCalendar) window.renderCalendar();
-            });
-        }
-        
-        async function initializeAuth() {
-            try {
-                let userCredential;
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    userCredential = await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    userCredential = await signInAnonymously(auth);
-                }
-                userId = userCredential.user.uid;
-                console.log("Autenticação bem-sucedida. User ID:", userId);
-                setupRealtimeListeners(); // Configura os listeners APÓS a autenticação
-            } catch (error) {
-                console.error("Erro na autenticação do Firebase:", error);
-            }
-        }
-
-        initializeAuth(); // Inicia o processo de autenticação assim que o script é carregado
-
+        // Adiciona um listener que espera a página inteira carregar antes de executar o script.
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- CABEÇALHO DINÂMICO ---
-            const clockEl = document.getElementById('clock');
-            const weatherEl = document.getElementById('weather');
-            const greetingMessageEl = document.getElementById('greeting-message');
+            // --- FUNÇÕES E LÓGICA QUE NÃO DEPENDEM DO FIREBASE ---
+            // Isso garante que a saudação, busca e outros elementos visuais sempre funcionem.
+
+            // 1. Saudação e Card Dinâmico
             const greetingCard = document.getElementById('greeting-card');
-
-            // 1. Relógio
-            function updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                if(clockEl) clockEl.textContent = `Horário: ${timeString}`;
-            }
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            // 2. Saudação e Card
-            const currentHour = new Date().getHours();
-            let greeting = '';
-            let icon = '';
-            let cardGreeting = '';
-            let cardIcon = '';
-            let cardBgColor = '';
-
-            if (currentHour >= 5 && currentHour < 12) {
-                greeting = 'Bom dia, equipe!';
-                icon = '☀️';
-                cardGreeting = 'Bom dia, equipe!';
-                cardIcon = '☀️';
-                cardBgColor = 'bg-gradient-to-br from-yellow-300 to-orange-400';
-            } else if (currentHour >= 12 && currentHour < 18) {
-                greeting = 'Boa tarde, equipe!';
-                icon = '⛅️';
-                cardGreeting = 'Boa tarde, equipe!';
-                cardIcon = '⛅️';
-                cardBgColor = 'bg-gradient-to-br from-blue-400 to-indigo-500';
-            } else {
-                greeting = 'Boa noite, equipe!';
-                icon = '🌙';
-                cardGreeting = 'Boa noite, equipe!';
-                cardIcon = '🌙';
-                cardBgColor = 'bg-gradient-to-br from-gray-700 to-gray-900';
-            }
-            
-            if(greetingMessageEl) {
-                greetingMessageEl.innerHTML = `<span class="mr-2 text-2xl">${icon}</span> ${greeting}`;
-            }
-            
             if (greetingCard) {
+                const currentHour = new Date().getHours();
+                let cardGreeting = '', cardIcon = '', cardBgColor = '';
+
+                if (currentHour >= 5 && currentHour < 12) {
+                    cardGreeting = 'Bom dia, equipe!';
+                    cardIcon = '☀️';
+                    cardBgColor = 'bg-gradient-to-br from-yellow-300 to-orange-400';
+                } else if (currentHour >= 12 && currentHour < 18) {
+                    cardGreeting = 'Boa tarde, equipe!';
+                    cardIcon = '⛅️';
+                    cardBgColor = 'bg-gradient-to-br from-blue-400 to-indigo-500';
+                } else {
+                    cardGreeting = 'Boa noite, equipe!';
+                    cardIcon = '🌙';
+                    cardBgColor = 'bg-gradient-to-br from-gray-700 to-gray-900';
+                }
+
                 greetingCard.className += ' ' + cardBgColor;
                 greetingCard.innerHTML = `
                     <div class="text-5xl mb-3">${cardIcon}</div>
                     <h3 class="text-2xl font-bold">${cardGreeting}</h3>
-                    <p class="mt-2 text-sm opacity-90">Que tenhamos um ótimo dia de trabalho!</p>
+                    <p class="mt-2 text-sm opacity-90">Tenham um bom trabalho.</p>
                 `;
             }
 
-            // 3. Previsão do Tempo
-            function getWeatherInfo(code) {
-                switch (code) {
-                    case 0: return { description: 'Céu limpo', icon: '☀️' };
-                    case 1: case 2: case 3: return { description: 'Parcialmente nublado', icon: '⛅️' };
-                    case 45: case 48: return { description: 'Nevoeiro', icon: '🌫️' };
-                    case 51: case 53: case 55: return { description: 'Garoa', icon: '🌦️' };
-                    case 61: case 63: case 65: return { description: 'Chuva', icon: '🌧️' };
-                    case 66: case 67: return { description: 'Chuva congelante', icon: '🌨️' };
-                    case 71: case 73: case 75: return { description: 'Neve', icon: '❄️' };
-                    case 80: case 81: case 82: return { description: 'Pancadas de chuva', icon: '🌧️' };
-                    case 95: case 96: case 99: return { description: 'Trovoada', icon: '⛈️' };
-                    default: return { description: 'Tempo bom', icon: '😊' };
-                }
+            // 2. Lógica de Busca
+            const searchInput = document.getElementById('searchInput');
+            const cards = document.querySelectorAll('.spreadsheet-card');
+            const noResultsMessage = document.getElementById('no-results');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', () => {
+                    const filter = searchInput.value.toLowerCase();
+                    let found = false;
+                    cards.forEach(card => {
+                        const title = card.querySelector('h3');
+                        if (title && title.innerText.toLowerCase().includes(filter)) {
+                            card.style.display = "";
+                            found = true;
+                        } else {
+                            card.style.display = "none";
+                        }
+                    });
+                    if (noResultsMessage) noResultsMessage.classList.toggle('hidden', !found);
+                });
             }
 
-            async function fetchWeather() {
-                if(!weatherEl) return;
-                try {
-                    const lat = -23.4558; // Latitude de Guarulhos
-                    const lon = -46.5328; // Longitude de Guarulhos
-                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=America/Sao_Paulo`;
-                    
-                    const response = await fetch(url);
-                    if (!response.ok) throw new Error('A resposta da rede não foi boa');
-                    const data = await response.json();
-
-                    if (data && data.daily) {
-                        const weather = getWeatherInfo(data.daily.weathercode[0]);
-                        const maxTemp = Math.round(data.daily.temperature_2m_max[0]);
-                        const minTemp = Math.round(data.daily.temperature_2m_min[0]);
-
-                        weatherEl.innerHTML = `
-                            <span class="mr-3 text-2xl">${weather.icon}</span>
-                            <span>${weather.description} | Mín: ${minTemp}° / Máx: ${maxTemp}° (Guarulhos)</span>
-                        `;
-                    }
-                } catch (error) {
-                    console.error("Erro ao buscar previsão do tempo:", error);
-                    weatherEl.textContent = 'Não foi possível carregar a previsão do tempo.';
-                }
-            }
-            
-            fetchWeather();
-
-
-            // AVISO DE QUINTA-FEIRA
+            // 3. Aviso de Quinta-feira
             const thursdayModal = document.getElementById('thursdayModal');
             const closeThursdayModalBtn = document.getElementById('closeThursdayModal');
-            const today = new Date();
-            if (today.getDay() === 4) { // 4 = Quinta-feira
+            if (new Date().getDay() === 4) { // 4 = Quinta-feira
                 if(thursdayModal) thursdayModal.classList.remove('hidden');
             }
             if(closeThursdayModalBtn) closeThursdayModalBtn.addEventListener('click', () => thursdayModal.classList.add('hidden'));
 
-            // BUSCA
-            const searchInput = document.getElementById('searchInput');
-            const cards = document.getElementsByClassName('spreadsheet-card');
-            const noResultsMessage = document.getElementById('no-results');
-            if(searchInput) searchInput.addEventListener('keyup', () => {
-                const filter = searchInput.value.toLowerCase();
-                let found = false;
-                for (let card of cards) {
-                    const title = card.querySelector('h3');
-                    if (title && title.innerText.toLowerCase().includes(filter)) {
-                        card.style.display = "";
-                        found = true;
-                    } else {
-                        card.style.display = "none";
-                    }
+            // --- INICIALIZAÇÃO DO FIREBASE E LÓGICA DO CALENDÁRIO ---
+            // Tenta inicializar o Firebase. Se falhar, o calendário é desabilitado.
+            try {
+                // CONFIGURAÇÃO DO FIREBASE
+                // IMPORTANTE: Para o site funcionar no GitHub, você PRECISA colar 
+                // a configuração do seu Firebase no lugar dos placeholders abaixo.
+                const firebaseConfigLocal = {
+                    apiKey: "COLE_SUA_API_KEY_AQUI",
+                    authDomain: "COLE_SEU_AUTH_DOMAIN_AQUI",
+                    projectId: "COLE_SEU_PROJECT_ID_AQUI",
+                    storageBucket: "COLE_SEU_STORAGE_BUCKET_AQUI",
+                    messagingSenderId: "COLE_SEU_MESSAGING_SENDER_ID_AQUI",
+                    appId: "COLE_SEU_APP_ID_AQUI"
+                };
+
+                const firebaseConfig = typeof __firebase_config !== 'undefined' 
+                    ? JSON.parse(__firebase_config) 
+                    : firebaseConfigLocal;
+                
+                // Valida se a configuração foi preenchida
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("COLE_SUA")) {
+                    throw new Error("A configuração do Firebase está faltando ou é um placeholder.");
                 }
-                if(noResultsMessage) noResultsMessage.classList.toggle('hidden', found);
-            });
 
-            // CALENDÁRIO
-            const calendarModal = document.getElementById('calendarModal');
-            const openCalendarBtn = document.getElementById('openCalendarBtn');
-            const closeCalendarModalBtn = document.getElementById('closeCalendarModal');
-            const prevMonthBtn = document.getElementById('prevMonth');
-            const nextMonthBtn = document.getElementById('nextMonth');
-            const monthYearEl = document.getElementById('monthYear');
-            const calendarGrid = document.getElementById('calendarGrid');
-            const addEventModal = document.getElementById('addEventModal');
-            const personNameInput = document.getElementById('personName');
-            const startDateInput = document.getElementById('startDate');
-            const endDateInput = document.getElementById('endDate');
-            const saveEventBtn = document.getElementById('saveEvent');
-            const cancelEventBtn = document.getElementById('cancelEvent');
-            const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-            const cancelDeleteBtn = document.getElementById('cancelDelete');
-            const confirmDeleteBtn = document.getElementById('confirmDelete');
-            
-            let currentDate = new Date();
-            let selectedDate = null;
-            let vacationIdToDelete = null;
-            
-            const colorPalette = ['#fecaca', '#bbf7d0', '#bfdbfe', '#e9d5ff', '#fbcfe8', '#c7d2fe', '#99f6e4'];
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+                const auth = getAuth(app);
+                
+                // Variáveis e funções que dependem do Firebase
+                let userId = null;
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'planilhas-amostras-dev';
+                const vacationsCollectionPath = `/artifacts/${appId}/public/data/vacations`;
+                const colorsDocPath = `/artifacts/${appId}/public/data/config/nameColors`;
+                let vacations = [];
+                let nameColors = {};
 
-            async function getColorForName(name) {
-                if (!nameColors[name]) {
-                    const usedColors = Object.values(nameColors);
-                    let newColor = colorPalette[0];
-                    for (const color of colorPalette) {
-                        if (!usedColors.includes(color)) {
-                            newColor = color;
-                            break;
+                function setupRealtimeListeners() {
+                    onSnapshot(doc(db, colorsDocPath), (docSnap) => {
+                        nameColors = docSnap.exists() ? docSnap.data() : {};
+                        if (window.renderCalendar) window.renderCalendar();
+                    });
+                    
+                    onSnapshot(collection(db, vacationsCollectionPath), (snapshot) => {
+                        vacations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        if (window.renderCalendar) window.renderCalendar();
+                    });
+                }
+                
+                async function initializeAuthAndListeners() {
+                    try {
+                        let userCredential;
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            userCredential = await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            userCredential = await signInAnonymously(auth);
                         }
+                        userId = userCredential.user.uid;
+                        console.log("Autenticação com Firebase bem-sucedida.");
+                        setupRealtimeListeners(); // Configura os listeners APÓS a autenticação
+                    } catch (error) {
+                        console.error("Erro na autenticação do Firebase:", error);
                     }
-                    nameColors[name] = newColor;
-                    await setDoc(doc(db, colorsDocPath), nameColors, { merge: true });
                 }
-                return nameColors[name];
-            }
 
-            window.renderCalendar = () => {
-                if(!calendarGrid || !monthYearEl) return;
-                calendarGrid.innerHTML = '';
-                const month = currentDate.getMonth();
-                const year = currentDate.getFullYear();
-                monthYearEl.textContent = `${currentDate.toLocaleString('pt-BR', { month: 'long' })} de ${year}`;
-                const firstDayOfMonth = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                // Elementos do Calendário
+                const calendarModal = document.getElementById('calendarModal');
+                const openCalendarBtn = document.getElementById('openCalendarBtn');
+                const closeCalendarModalBtn = document.getElementById('closeCalendarModal');
+                const prevMonthBtn = document.getElementById('prevMonth');
+                const nextMonthBtn = document.getElementById('nextMonth');
+                const monthYearEl = document.getElementById('monthYear');
+                const calendarGrid = document.getElementById('calendarGrid');
+                const addEventModal = document.getElementById('addEventModal');
+                const personNameInput = document.getElementById('personName');
+                const startDateInput = document.getElementById('startDate');
+                const endDateInput = document.getElementById('endDate');
+                const saveEventBtn = document.getElementById('saveEvent');
+                const cancelEventBtn = document.getElementById('cancelEvent');
+                const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+                const cancelDeleteBtn = document.getElementById('cancelDelete');
+                const confirmDeleteBtn = document.getElementById('confirmDelete');
                 
-                for (let i = 0; i < firstDayOfMonth; i++) calendarGrid.insertAdjacentHTML('beforeend', '<div></div>');
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const currentDayDateObj = new Date(dateStr + 'T12:00:00Z');
-                    
-                    const peopleOnVacation = vacations.filter(vac => {
-                        const start = new Date(vac.startDate + 'T12:00:00Z');
-                        const end = new Date(vac.endDate + 'T12:00:00Z');
-                        return currentDayDateObj >= start && currentDayDateObj <= end;
-                    });
-                    
-                    let dayClasses = 'bg-gray-100 hover:bg-blue-100';
-                    const isToday = currentDayDateObj.toDateString() === new Date().toDateString();
-                    if (isToday) dayClasses = 'bg-blue-800 text-white font-bold';
-                    if (peopleOnVacation.length > 0) dayClasses = `bg-amber-300 ${isToday ? 'text-white' : 'text-gray-900'}`;
-                    
-                    let namesHtml = '<div class="text-xs text-left overflow-hidden flex flex-col items-start gap-1 mt-1 w-full">';
-                    peopleOnVacation.forEach(person => {
-                        const color = nameColors[person.name] || '#e5e7eb';
-                        namesHtml += `
-                            <div class="flex items-center font-semibold truncate px-1.5 py-0.5 rounded-full text-gray-800" style="background-color: ${color}">
-                                ${person.name}
-                                <span class="delete-vacation ml-1.5" data-id="${person.id}">&times;</span>
-                            </div>`;
-                    });
-                    namesHtml += '</div>';
-
-                    calendarGrid.insertAdjacentHTML('beforeend', `
-                        <div class="calendar-day cursor-pointer rounded-lg p-1 min-h-[100px] flex flex-col items-start ${dayClasses} transition-colors" data-date="${dateStr}">
-                            <div class="font-bold">${day}</div>
-                            ${namesHtml}
-                        </div>`);
-                }
-            };
-            
-            if(openCalendarBtn) openCalendarBtn.addEventListener('click', () => {
-                renderCalendar(); // Garante que o calendário está atualizado ao abrir
-                if(calendarModal) calendarModal.classList.remove('hidden');
-            });
-            if(closeCalendarModalBtn) closeCalendarModalBtn.addEventListener('click', () => calendarModal.classList.add('hidden'));
-            if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
-            if(nextMonthBtn) nextMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
-            
-            if(calendarGrid) calendarGrid.addEventListener('click', (e) => {
-                if (e.target.classList.contains('delete-vacation')) {
-                    vacationIdToDelete = e.target.dataset.id;
-                    if(deleteConfirmModal) deleteConfirmModal.classList.remove('hidden');
-                    return;
-                }
-
-                const dayEl = e.target.closest('.calendar-day');
-                if (dayEl) {
-                    selectedDate = dayEl.dataset.date;
-                    startDateInput.value = selectedDate;
-                    endDateInput.value = selectedDate;
-                    personNameInput.value = '';
-                    if(addEventModal) addEventModal.classList.remove('hidden');
-                    if(personNameInput) personNameInput.focus();
-                }
-            });
-            
-            if(cancelEventBtn) cancelEventBtn.addEventListener('click', () => addEventModal.classList.add('hidden'));
-            if(saveEventBtn) saveEventBtn.addEventListener('click', async () => {
-                const name = personNameInput.value.trim();
-                const startDate = startDateInput.value;
-                const endDate = endDateInput.value;
+                let currentDate = new Date();
+                let selectedDate = null;
+                let vacationIdToDelete = null;
                 
-                if (name && startDate && endDate && endDate >= startDate) {
-                    saveEventBtn.disabled = true;
-                    saveEventBtn.textContent = "Salvando...";
-                    await getColorForName(name);
-                    await addDoc(collection(db, vacationsCollectionPath), { name, startDate, endDate, ownerId: userId });
-                    addEventModal.classList.add('hidden');
-                    saveEventBtn.disabled = false;
-                    saveEventBtn.textContent = "Salvar";
-                } else {
-                    console.error('Dados inválidos.');
-                }
-            });
+                const colorPalette = ['#fecaca', '#bbf7d0', '#bfdbfe', '#e9d5ff', '#fbcfe8', '#c7d2fe', '#99f6e4'];
 
-            if(cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', () => {
-                vacationIdToDelete = null;
-                deleteConfirmModal.classList.add('hidden');
-            });
-            if(confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', async () => {
-                if (vacationIdToDelete) {
-                    confirmDeleteBtn.disabled = true;
-                    await deleteDoc(doc(db, vacationsCollectionPath, vacationIdToDelete));
+                async function getColorForName(name) {
+                    if (!nameColors[name]) {
+                        const usedColors = Object.values(nameColors);
+                        let newColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                        if (usedColors.length < colorPalette.length) {
+                             // Tenta encontrar uma cor não usada
+                            newColor = colorPalette.find(c => !usedColors.includes(c)) || newColor;
+                        }
+                        nameColors[name] = newColor;
+                        await setDoc(doc(db, colorsDocPath), nameColors, { merge: true });
+                    }
+                    return nameColors[name];
+                }
+
+                window.renderCalendar = () => {
+                    if(!calendarGrid || !monthYearEl) return;
+                    calendarGrid.innerHTML = '';
+                    const month = currentDate.getMonth();
+                    const year = currentDate.getFullYear();
+                    monthYearEl.textContent = `${currentDate.toLocaleString('pt-BR', { month: 'long' })} de ${year}`;
+                    const firstDayOfMonth = new Date(year, month, 1).getDay();
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                    
+                    for (let i = 0; i < firstDayOfMonth; i++) calendarGrid.insertAdjacentHTML('beforeend', '<div></div>');
+
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const currentDayDateObj = new Date(dateStr + 'T12:00:00Z');
+                        
+                        const peopleOnVacation = vacations.filter(vac => {
+                            const start = new Date(vac.startDate + 'T12:00:00Z');
+                            const end = new Date(vac.endDate + 'T12:00:00Z');
+                            return currentDayDateObj >= start && currentDayDateObj <= end;
+                        });
+                        
+                        let dayClasses = 'bg-gray-100 hover:bg-blue-100';
+                        const isToday = currentDayDateObj.toDateString() === new Date().toDateString();
+                        if (isToday) dayClasses = 'bg-blue-800 text-white font-bold';
+                        
+                        let namesHtml = '<div class="text-xs text-left overflow-hidden flex flex-col items-start gap-1 mt-1 w-full">';
+                        peopleOnVacation.forEach(person => {
+                            const color = nameColors[person.name] || '#e5e7eb';
+                            namesHtml += `
+                                <div class="flex items-center font-semibold truncate px-1.5 py-0.5 rounded-full text-gray-800" style="background-color: ${color}">
+                                    ${person.name}
+                                    <span class="delete-vacation ml-1.5" data-id="${person.id}">&times;</span>
+                                </div>`;
+                        });
+                        namesHtml += '</div>';
+
+                        calendarGrid.insertAdjacentHTML('beforeend', `
+                            <div class="calendar-day cursor-pointer rounded-lg p-1 min-h-[100px] flex flex-col items-start ${dayClasses} transition-colors" data-date="${dateStr}">
+                                <div class="font-bold">${day}</div>
+                                ${namesHtml}
+                            </div>`);
+                    }
+                };
+                
+                if(openCalendarBtn) openCalendarBtn.addEventListener('click', () => {
+                    renderCalendar();
+                    if(calendarModal) calendarModal.classList.remove('hidden');
+                });
+                if(closeCalendarModalBtn) closeCalendarModalBtn.addEventListener('click', () => calendarModal.classList.add('hidden'));
+                if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+                if(nextMonthBtn) nextMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+                
+                if(calendarGrid) calendarGrid.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('delete-vacation')) {
+                        vacationIdToDelete = e.target.dataset.id;
+                        if(deleteConfirmModal) deleteConfirmModal.classList.remove('hidden');
+                        return;
+                    }
+
+                    const dayEl = e.target.closest('.calendar-day');
+                    if (dayEl) {
+                        selectedDate = dayEl.dataset.date;
+                        startDateInput.value = selectedDate;
+                        endDateInput.value = selectedDate;
+                        personNameInput.value = '';
+                        if(addEventModal) addEventModal.classList.remove('hidden');
+                        if(personNameInput) personNameInput.focus();
+                    }
+                });
+                
+                if(cancelEventBtn) cancelEventBtn.addEventListener('click', () => addEventModal.classList.add('hidden'));
+                if(saveEventBtn) saveEventBtn.addEventListener('click', async () => {
+                    const name = personNameInput.value.trim();
+                    const startDate = startDateInput.value;
+                    const endDate = endDateInput.value;
+                    
+                    if (name && startDate && endDate && endDate >= startDate) {
+                        saveEventBtn.disabled = true;
+                        saveEventBtn.textContent = "Salvando...";
+                        await getColorForName(name);
+                        await addDoc(collection(db, vacationsCollectionPath), { name, startDate, endDate, ownerId: userId });
+                        addEventModal.classList.add('hidden');
+                        saveEventBtn.disabled = false;
+                        saveEventBtn.textContent = "Salvar";
+                    } else {
+                        console.error('Dados inválidos para salvar as férias.');
+                    }
+                });
+
+                if(cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', () => {
                     vacationIdToDelete = null;
                     deleteConfirmModal.classList.add('hidden');
-                    confirmDeleteBtn.disabled = false;
+                });
+                if(confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', async () => {
+                    if (vacationIdToDelete) {
+                        confirmDeleteBtn.disabled = true;
+                        await deleteDoc(doc(db, vacationsCollectionPath, vacationIdToDelete));
+                        vacationIdToDelete = null;
+                        deleteConfirmModal.classList.add('hidden');
+                        confirmDeleteBtn.disabled = false;
+                    }
+                });
+
+                // Inicia o processo de autenticação
+                initializeAuthAndListeners();
+
+            } catch (error) {
+                console.error("ERRO: O calendário não pôde ser carregado.", error.message);
+                const openCalendarBtn = document.getElementById('openCalendarBtn');
+                if (openCalendarBtn) {
+                    openCalendarBtn.textContent = 'Calendário Indisponível';
+                    openCalendarBtn.title = 'Erro na configuração do Firebase.';
+                    openCalendarBtn.disabled = true;
+                    openCalendarBtn.classList.remove('bg-blue-800', 'hover:bg-blue-900');
+                    openCalendarBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
                 }
-            });
+            }
         });
     </script>
 </body>
 </html>
+
 
 
 
