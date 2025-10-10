@@ -542,7 +542,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- CABEÇALHO E SAUDAÇÃO DINÂMICOS ---
+            // --- CABEÇALHO DINÂMICO ---
             const clockEl = document.getElementById('clock');
             const weatherEl = document.getElementById('weather');
             const greetingMessageEl = document.getElementById('greeting-message');
@@ -584,10 +584,13 @@
                 cardIcon = '🌙';
                 cardBgColor = 'bg-gradient-to-br from-gray-700 to-gray-900';
             }
-            if(greetingMessageEl) greetingMessageEl.innerHTML = `<span class="mr-2 text-2xl">${icon}</span> ${greeting}`;
+            
+            if(greetingMessageEl) {
+                greetingMessageEl.innerHTML = `<span class="mr-2 text-2xl">${icon}</span> ${greeting}`;
+            }
             
             if (greetingCard) {
-                greetingCard.classList.add(...cardBgColor.split(' '));
+                greetingCard.className += ' ' + cardBgColor;
                 greetingCard.innerHTML = `
                     <div class="text-5xl mb-3">${cardIcon}</div>
                     <h3 class="text-2xl font-bold">${cardGreeting}</h3>
@@ -816,6 +819,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
