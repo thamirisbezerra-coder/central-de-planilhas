@@ -542,10 +542,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- CABEÇALHO DINÂMICO ---
+            // --- CABEÇALHO E SAUDAÇÃO DINÂMICOS ---
             const clockEl = document.getElementById('clock');
             const weatherEl = document.getElementById('weather');
             const greetingMessageEl = document.getElementById('greeting-message');
+            const greetingCard = document.getElementById('greeting-card');
 
             // 1. Relógio
             function updateClock() {
@@ -556,23 +557,44 @@
             updateClock();
             setInterval(updateClock, 1000);
 
-            // 2. Saudação
+            // 2. Saudação e Card
             const currentHour = new Date().getHours();
             let greeting = '';
             let icon = '';
-            
+            let cardGreeting = '';
+            let cardIcon = '';
+            let cardBgColor = '';
+
             if (currentHour >= 5 && currentHour < 12) {
                 greeting = 'Bom dia, equipe!';
                 icon = '☀️';
+                cardGreeting = 'Bom dia, equipe!';
+                cardIcon = '☀️';
+                cardBgColor = 'bg-gradient-to-br from-yellow-300 to-orange-400';
             } else if (currentHour >= 12 && currentHour < 18) {
                 greeting = 'Boa tarde, equipe!';
                 icon = '⛅️';
+                cardGreeting = 'Boa tarde, equipe!';
+                cardIcon = '⛅️';
+                cardBgColor = 'bg-gradient-to-br from-blue-400 to-indigo-500';
             } else {
                 greeting = 'Boa noite, equipe!';
                 icon = '🌙';
+                cardGreeting = 'Boa noite, equipe!';
+                cardIcon = '🌙';
+                cardBgColor = 'bg-gradient-to-br from-gray-700 to-gray-900';
             }
             if(greetingMessageEl) greetingMessageEl.innerHTML = `<span class="mr-2 text-2xl">${icon}</span> ${greeting}`;
             
+            if (greetingCard) {
+                greetingCard.classList.add(...cardBgColor.split(' '));
+                greetingCard.innerHTML = `
+                    <div class="text-5xl mb-3">${cardIcon}</div>
+                    <h3 class="text-2xl font-bold">${cardGreeting}</h3>
+                    <p class="mt-2 text-sm opacity-90">Que tenhamos um ótimo dia de trabalho!</p>
+                `;
+            }
+
             // 3. Previsão do Tempo
             function getWeatherInfo(code) {
                 switch (code) {
@@ -794,6 +816,9 @@
     </script>
 </body>
 </html>
+
+
+
 
 
 
