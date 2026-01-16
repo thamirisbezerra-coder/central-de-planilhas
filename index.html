@@ -106,22 +106,18 @@
                     </div>
                 </div>
 
-                <!-- Calendário de Ausências (Novo) -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
-                     <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-4">
-                            <div>
-                                <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
-                                <p class="text-slate-500 text-sm">Controle de férias e faltas</p>
-                            </div>
-                            <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            </div>
+                <!-- Calendário de Ausências (Novo Link) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
+                            <p class="text-slate-500 text-sm">Férias e faltas da equipe</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">Ferramenta importante para o setor.</p>
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
                     </div>
-                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 z-10">
+                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
                         <span>Acessar Calendário</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -133,7 +129,7 @@
                         <div>
                             <h3 class="font-bold text-lg text-rose-900">Aniversariantes</h3>
                             <div id="birthday-list" class="text-rose-700 text-sm mt-1">
-                                <!-- JS Injects here -->
+                                <span class="text-rose-400 text-xs">Carregando...</span>
                             </div>
                         </div>
                         <div class="p-2 bg-white text-rose-500 rounded-lg shadow-sm">
@@ -627,7 +623,7 @@
         </footer>
     </div>
     
-    <!-- MODAIS (Mantidos Funcionais) -->
+    <!-- MODAIS (Aniversariantes e Confirmação apenas) -->
     
     <!-- Modal Gerir Aniversariantes -->
      <div id="birthdayModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
@@ -679,7 +675,6 @@
         </div>
     </div>
 
-    <!-- Script Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -692,6 +687,7 @@
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'planilhas-amostras-dev';
             let itemToDelete = { id: null, type: null, path: null };
 
+            // Apenas aniversariantes agora
             const birthdaysCollectionPath = `/artifacts/${appId}/public/data/birthdays`;
 
             const clockEl = document.getElementById('clock');
@@ -746,7 +742,6 @@
                         const temp = Math.round(data.current_weather.temperature);
                         const weatherCode = data.current_weather.weathercode;
                         const weatherInfo = getWeatherInfo(weatherCode);
-                         // Mostra apenas ícone e temp atual para ficar clean
                         weatherEl.innerHTML = `<span class="text-lg">${weatherInfo.icon}</span> <span>${temp}°C</span>`;
                     }
                 } catch (error) {
@@ -768,7 +763,6 @@
                 else if (hour >= 12 && hour < 18) { greeting = 'Boa tarde, equipe!'; colorClass = 'bg-gradient-to-br from-blue-500 to-indigo-600'; }
                 else { greeting = 'Boa noite, equipe!'; colorClass = 'bg-gradient-to-br from-slate-700 to-slate-900'; }
                 
-                // Limpa classes anteriores de cor
                 greetingCard.className = greetingCard.className.replace(/bg-gradient-to-br from-\w+-\d+ to-\w+-\d+/g, '');
                 greetingCard.classList.add(...colorClass.split(' '));
                 
@@ -843,16 +837,10 @@
 
             if(openBirthdayModalBtn) openBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.remove('hidden'));
             if(closeBirthdayModalBtn) closeBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.add('hidden'));
-            
             if(saveBirthdayBtn) { 
                 saveBirthdayBtn.addEventListener('click', async () => {
                     const name = birthdayNameInput.value.trim();
                     const date = birthdayDateInput.value;
-                    
-                    if (!userId) {
-                        showErrorModal('Aguarde, autenticando no sistema...');
-                        return;
-                    }
                     if (!name || !date) { showErrorModal('Preencha todos os campos.'); return; }
                     
                     saveBirthdayBtn.disabled = true;
@@ -860,10 +848,7 @@
                     try {
                         await addDoc(collection(db, birthdaysCollectionPath), { name, birthDate: date });
                         birthdayNameInput.value = ''; birthdayDateInput.value = '';
-                    } catch (error) { 
-                        console.error("Erro ao salvar:", error);
-                        showErrorModal(`Erro: ${error.message || "Permissão negada."}`); 
-                    }
+                    } catch (error) { showErrorModal(`Erro: ${error.message}`); }
                     finally { saveBirthdayBtn.disabled = false; saveBirthdayBtn.textContent = 'Salvar'; }
                 });
             }
@@ -889,7 +874,6 @@
                     if (itemToDelete.id && itemToDelete.path) {
                         confirmDeleteBtn.disabled = true; confirmDeleteBtn.textContent = '...';
                         try {
-                            if (!userId) throw new Error("Usuário não autenticado.");
                             await deleteDoc(doc(db, itemToDelete.path, itemToDelete.id));
                         } catch (error) { showErrorModal(`Erro: ${error.message}`); }
                         finally {
@@ -923,24 +907,39 @@
                     db = getFirestore(app);
                     auth = getAuth(app);
 
-                    // Autenticação robusta antes de qualquer operação
-                    let userCredential;
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        userCredential = await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        userCredential = await signInAnonymously(auth);
-                    }
+                    const userCredential = (typeof __initial_auth_token !== 'undefined' && __initial_auth_token)
+                        ? await signInWithCustomToken(auth, __initial_auth_token)
+                        : await signInAnonymously(auth);
                     userId = userCredential.user.uid;
 
-                    // Só inicia os listeners depois de logado
+                    // Lista fixa de aniversariantes (Fallback/Padrão)
+                    const fallbackBirthdays = [
+                        { id: 'static_1', name: 'Neiva Pereira', birthDate: '2000-01-05' },
+                        { id: 'static_2', name: 'Paula Novais', birthDate: '2000-01-26' },
+                        { id: 'static_3', name: 'Thamiris', birthDate: '2000-02-06' },
+                        { id: 'static_4', name: 'Douglas', birthDate: '2000-06-30' }
+                    ];
+
+                    // Tratamento de erro específico para permissões no onSnapshot
                     onSnapshot(collection(db, birthdaysCollectionPath), (snapshot) => {
-                        const birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        let birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        
+                        // Se o banco estiver vazio, usa a lista fixa
+                        if (birthdayData.length === 0) {
+                            birthdayData = fallbackBirthdays;
+                        }
+                        
                         renderBirthdays(birthdayData);
+                    }, (error) => {
+                        console.error("Erro ao buscar aniversariantes (Usando lista fixa):", error);
+                        // Em caso de erro (permissão), usa a lista fixa para não ficar vazio
+                        renderBirthdays(fallbackBirthdays);
                     });
 
                 } catch (error) {
                     console.error("ERRO GERAL:", error.message);
-                    showErrorModal("Erro de conexão com o banco de dados. Tente recarregar.");
+                    // Não mostra modal intrusivo na inicialização se for apenas permissão
+                    if(birthdayList) birthdayList.innerHTML = '<span class="text-slate-400 text-xs">Indisponível.</span>';
                 }
             }
             
@@ -951,6 +950,7 @@
     </script>
 </body>
 </html>
+
 
 
 
