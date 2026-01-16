@@ -3,525 +3,724 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planilhas Setor de Amostras</title>
-    <!-- Incluindo Tailwind CSS para um design moderno -->
+    <title>Central de Amostras</title>
+    <!-- Incluindo Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Importando uma fonte para melhor visualização -->
+    <!-- Fonte Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
         }
-        .delete-btn {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .delete-btn, .delete-vacation {
             cursor: pointer;
-            font-weight: bold;
-            color: #ef4444; /* red-500 */
-            opacity: 0.5;
+            color: #ef4444;
+            opacity: 0.6;
             transition: opacity 0.2s;
         }
-        .delete-btn:hover {
+        .delete-btn:hover, .delete-vacation:hover {
             opacity: 1;
         }
-        .delete-vacation {
-            cursor: pointer;
-            font-weight: bold;
-            color: #ef4444; /* red-500 */
-            opacity: 0.5;
-            transition: opacity 0.2s;
+
+        /* Card Link Styles */
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
-        .delete-vacation:hover {
-            opacity: 1;
+        .link-item:hover {
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+            transform: translateX(4px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .spreadsheet-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
 
-    <div id="main-content">
-        <div class="container mx-auto px-4 py-8 md:py-12">
+    <div id="main-content" class="min-h-screen flex flex-col">
+        
+        <!-- Top Bar / Header Compacto -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm bg-opacity-90 backdrop-blur-md">
+            <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+                <!-- Logo e Título -->
+                <div class="flex items-center gap-4">
+                    <img src="https://i.postimg.cc/76mXWMJh/as-02.png" alt="Logo" class="h-12 w-auto object-contain">
+                    <div class="hidden md:block w-px h-8 bg-slate-300"></div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800 leading-tight">Central de Amostras</h1>
+                        <p class="text-xs text-slate-500 font-medium">Portal de Gestão Integrada</p>
+                    </div>
+                </div>
 
-            <!-- Cabeçalho Principal -->
-            <header id="main-header" class="relative text-center mb-10 p-6 md:p-8 rounded-2xl shadow-lg text-white bg-gradient-to-br from-blue-800 to-blue-900 overflow-hidden">
-                <div class="relative z-10">
-                    <h1 class="text-4xl md:text-5xl font-bold">Planilhas Setor de Amostras</h1>
-                    <p class="mt-3 text-lg opacity-90">Acesso rápido e fácil a todas as planilhas importantes do nosso setor.</p>
+                <!-- Info Direita -->
+                <div class="flex items-center gap-4 text-sm font-medium text-slate-600">
+                    <div id="weather" class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
+                        <span>Carregando...</span>
+                    </div>
+                    <div id="clock" class="bg-slate-800 text-white px-4 py-1.5 rounded-full shadow-md">
+                        --:--
+                    </div>
                 </div>
-                 <!-- Informações Dinâmicas: Relógio e Clima -->
-                <div id="header-info" class="relative z-10 mt-6 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm bg-black bg-opacity-20 backdrop-blur-sm rounded-full py-2 px-6 max-w-xl mx-auto">
-                    <div id="clock" class="font-semibold">A carregar relógio...</div>
-                    <div id="weather" class="font-semibold">A carregar clima...</div>
-                </div>
-            </header>
-
-            <!-- Seção de Planejamento de Férias -->
-            <div class="mb-10 p-6 bg-white rounded-2xl shadow-lg flex flex-col sm:flex-row items-center justify-between">
-                <div class="flex items-center text-center sm:text-left">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" />
-                       </svg>
-                   </div>
-                   <div class="ml-4">
-                        <h3 class="text-xl font-bold text-gray-800">Planejamento de Férias</h3>
-                        <p class="text-gray-600 text-sm">Organização do calendário de férias de toda a equipe para o ano.</p>
-                   </div>
-                </div>
-                <button id="openCalendarBtn" class="mt-4 sm:mt-0 sm:ml-6 flex-shrink-0 px-6 py-3 bg-blue-800 text-white rounded-lg font-semibold hover:bg-blue-900 transition-colors">
-                    Abrir Calendário
-                </button>
             </div>
+        </header>
 
-            <!-- Seção de Aniversariantes -->
-            <div id="birthday-section" class="mb-10 p-4 bg-gradient-to-r from-rose-50 to-teal-50 rounded-2xl shadow-md flex items-center justify-between">
-                <div id="birthday-list" class="text-gray-700">
-                    <!-- Conteúdo dos aniversariantes será inserido aqui -->
+        <div class="container mx-auto px-4 py-8 flex-grow">
+            
+            <!-- Grid de Utilitários (Férias e Aniversários) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+                
+                <!-- Saudação -->
+                <div id="greeting-card" class="rounded-2xl p-6 text-white shadow-lg flex flex-col justify-center items-start relative overflow-hidden group">
+                    <!-- Preenchido via JS -->
+                    <div class="absolute right-[-20px] top-[-20px] opacity-10 transform rotate-12 group-hover:scale-110 transition-transform duration-700">
+                        <svg class="w-48 h-48" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    </div>
                 </div>
-                <button id="openBirthdayModalBtn" class="ml-4 px-3 py-1 bg-rose-100 text-rose-700 text-sm font-semibold rounded-full hover:bg-rose-200 transition-colors">
-                    Gerenciar
-                </button>
+
+                <!-- Planejamento de Férias -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Férias da Equipe</h3>
+                            <p class="text-slate-500 text-sm">Calendário anual</p>
+                        </div>
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    </div>
+                    <button id="openCalendarBtn" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+                        <span>Acessar Calendário</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Aniversariantes -->
+                <div id="birthday-section" class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="font-bold text-lg text-rose-900">Aniversariantes</h3>
+                            <div id="birthday-list" class="text-rose-700 text-sm mt-1">
+                                <!-- JS Injects here -->
+                            </div>
+                        </div>
+                        <div class="p-2 bg-white text-rose-500 rounded-lg shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
+                        </div>
+                    </div>
+                    <button id="openBirthdayModalBtn" class="self-start px-4 py-1.5 bg-white text-rose-600 text-xs font-bold uppercase tracking-wide rounded-full shadow-sm hover:bg-rose-50 transition-colors mt-2">
+                        Gerenciar
+                    </button>
+                </div>
             </div>
 
             <!-- Barra de Busca -->
-            <div class="mb-10 max-w-2xl mx-auto">
-                <input type="text" id="searchInput"
-                       class="w-full p-4 border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                       placeholder="Procurar planilha pelo nome...">
+            <div class="relative max-w-xl mx-auto mb-12 group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <input type="text" id="searchInput" 
+                    class="block w-full pl-11 pr-4 py-4 bg-white border border-slate-200 rounded-full shadow-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-sm font-medium" 
+                    placeholder="Pesquisar planilha, ferramenta ou formulário...">
             </div>
 
-            <!-- Grid de Planilhas -->
-            <main id="spreadsheet-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                
-                <!-- Card de Saudação Dinâmico -->
-                <div id="greeting-card" class="spreadsheet-card rounded-xl shadow-lg p-6 flex flex-col justify-center items-center text-white text-center">
-                    <!-- Conteúdo será preenchido pelo JavaScript -->
-                </div>
+            <!-- Grid Principal -->
+            <main id="spreadsheet-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-                <!-- Card: Painel de Feedbacks -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Painel de Feedbacks</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesse os painéis de gestão para vendedores e gestores.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                        <a href="https://thamirisbezerra-coder.github.io/Painel-Do-Gestor-Feedbacks/" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Painel de Gestão</a>
-                        <a href="https://thamirisbezerra-coder.github.io/Tela-do-Vendedor/" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Painel do Vendedor</a>
-                    </div>
-                </div>
+                <!-- GRUPO 1: PEDIDOS & VENDAS (Destaque) -->
                 
-                <!-- Card: Rastreamento Vendedores -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Rastreamento Vendedores</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Portal de rastreamento para vendedores e planilha de alimentação.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                        <a href="https://thamirisbezerra-coder.github.io/RastreiosPedidosAM/" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Portal de Rastreamento</a>
-                        <a href="https://docs.google.com/spreadsheets/d/1Lwsx97SijssRttyUjnbseGhVTSXiciXtZ6Acszsi0h8/edit?gid=0#gid=0" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Alimentar Rastreios</a>
-                    </div>
-                </div>
-
-                <!-- Card: Acessos Correios -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Acessos Correios</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Links para pré-postagem, rastreamento e busca de CEP.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                        <a href="https://www.prepostagem.com.br/principal.aspx" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Pré-Postagem (ADM)</a>
-                        <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Rastreamento</a>
-                        <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Busca CEP</a>
-                    </div>
-                </div>
-                
-                <!-- Card: Acesso Nimbi -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Acesso Nimbi</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Portal para requisições de compra.</p>
-                        <div class="mt-2 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 text-xs text-left rounded-r-lg">
-                            <p class="font-bold">Instruções:</p>
-                            <ul class="list-disc list-inside mt-1">
-                                <li>Para comprar algo, contatar Paula ou Thamiris.</li>
-                                <li>Materiais de escritório ou caixas: avisar na quinta-feira.</li>
-                            </ul>
+                <!-- Planilhas 2026 -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-green-50 rounded-bl-full -mr-8 -mt-8 z-0"></div>
+                    <div class="relative z-10 flex flex-col h-full">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-green-100 text-green-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-800">Planilhas 2026</h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4 px-1">Links de pedidos para o ano corrente.</p>
+                        
+                        <div class="mt-auto space-y-2">
+                             <a href="https://docs.google.com/spreadsheets/d/1CS_vhDl23kDEcSknZ9JJL3qnPM01KZdMcfDo6GjbrLM/edit?gid=1763657996#gid=1763657996" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍦</span> Sorvetes</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1yQNc1fxlbtmBjvGeWHR4LsfAc_gl6GDjaRKY2PBhrFA/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">💊</span> Nutracêuticos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1F4BBYWcXnl0xdfEJ9ESAdW5Bd7tzuVhdAYqybpA75p4/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🧀</span> Lácteos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1Fcu2lee-t-Ivv3hBVDiPUDH3-DZ41yKd0cmXTjm6Heo/edit?gid=1136753513#gid=1136753513" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥩</span> Cárneos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥨</span> Aromas Salgados</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1_jGSiyTDzB5AVSChHqJ48AuQPQX9vVzFduS_ct0m4ZA/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍰</span> Aromas Doces</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                             </a>
                         </div>
                     </div>
-                    <a href="https://login.nimbi.com.br/" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Portal</a>
                 </div>
 
-                <!-- Card: Biblioteca Aromas -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Biblioteca Aromas</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesso à biblioteca de aromas e suas informações.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1vLeTsQrH0DPdtDg0CHgBClkX1l3EIN85QPUZIzUoBG8/edit?gid=0#gid=0" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Biblioteca</a>
-                </div>
-
-                <!-- Card: Cadastro Nimbi -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Cadastro Nimbi</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Formulário para cadastro de fornecedores no portal Nimbi.</p>
-                    </div>
-                    <a href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSftGUmiOwcCIxiPf2h3Uej7nhB8YGQDlkUchG1yLN5g-38pSA/formResponse" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Formulário</a>
-                </div>
-                
-                <!-- Card: Cola de Centros de Custos -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Cola de Centros de Custos</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesso rápido aos centros de custos para requisições.</p>
-                    </div>
-                    <a href="https://thamirisbezerra-coder.github.io/Cola-Centro-de-Custos/" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar</a>
-                </div>
-
-                <!-- Card: Controle de Bolsas Térmicas -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Controle de Bolsas Térmicas</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acompanhamento e controle do uso de bolsas térmicas.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1_S93UtnBU9Ex0wPUfJKAgP3PxEDRXBPWdLYVPJy8XJQ/edit" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
-
-                <!-- Card: Controle de Brindes -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                     <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Controle de Brindes</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesse o formulário para solicitar brindes e a planilha para ver os pedidos.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGfUfL5srAFd3US76MO1YwnA41ixulH03_2pDR42ciOLR-HA/viewform" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Solicitar Brindes</a>
-                        <a href="https://docs.google.com/spreadsheets/d/1atM4u6ieKd0HObhSu5wny0ba2MNUc83slbmlLVvbfHk/edit?gid=1250292262#gid=1250292262" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Ver Solicitações</a>
-                    </div>
-                </div>
-
-                <!-- Card: Controle de Estoque -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Controle de Estoque</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Gerenciamento de entrada e saída de materiais do nosso estoque.</p>
-                        <div class="mt-2 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 text-xs text-left rounded-r-lg">
-                            <p class="font-bold">Lembrete Importante:</p>
-                            <p>Pessoal, esta planilha é temporária. Não se esqueçam de preencher. A senha é <strong class="font-bold">AMOSTRAS2025</strong>. Após o uso, ocultem a aba.</p>
+                <!-- Pedidos Enviados 2025 -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-full -mr-8 -mt-8 z-0"></div>
+                     <div class="relative z-10 flex flex-col h-full">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-blue-100 text-blue-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-800">Enviados 2025</h3>
+                        </div>
+                         <p class="text-xs text-slate-500 mb-4 px-1">Histórico de pedidos enviados.</p>
+                        
+                        <div class="mt-auto space-y-2">
+                             <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍰</span> Aromas Doces</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥨</span> Aromas Salgados</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥩</span> Cárneos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1oN6p-BNH7rFj4n3OKeDXVUFdYBRCbrqC5SUTmShw9Rw/edit?gid=891834841#gid=891834841" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🧀</span> Lácteos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/13azWh7gS4mbWNmJXW9kN1Ull2J54GtdnQ_3fInK3Ss0/edit?gid=765793117#gid=765793117" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">💊</span> Nutracêuticos</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
+                             <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" class="link-item group">
+                                <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍦</span> Sorvetes</span>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                             </a>
                         </div>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1GoKvZZwdqGzlpGoQDky5Ae6db3jHjPsDq0cRLpDmE6M/edit?gid=452885543#gid=452885543" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
                 </div>
 
-                <!-- Card: Criar Lotes Amostras -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <!-- Painel de Feedbacks -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-violet-100 text-violet-600 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Painel Feedbacks</h3>
                     </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Criar Lotes Amostras</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Planilha para a criação de novos lotes de amostras.</p>
+                    <p class="text-xs text-slate-500 mb-6 px-1">Gestão de vendedores e feedbacks.</p>
+                    <div class="mt-auto space-y-2">
+                        <a href="https://thamirisbezerra-coder.github.io/Painel-Do-Gestor-Feedbacks/" target="_blank" class="link-item group border-l-4 border-l-violet-500">
+                            <span class="font-medium text-sm text-slate-700">Painel de Gestão</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="https://thamirisbezerra-coder.github.io/Tela-do-Vendedor/" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Painel do Vendedor</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1xz2bXvRkCWmlR-st-pPFiZZiIIy12BO6rNEF7B98n7A/edit?gid=1513430354#gid=1513430354" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
                 </div>
 
-                <!-- Card: Descarte de Produtos -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                <!-- GRUPO 2: LOGÍSTICA & RASTREIO -->
+                
+                <!-- Rastreamento Vendedores -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-amber-100 text-amber-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Rastreamento</h3>
                     </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Descarte de Produtos</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Controle e registro de produtos descartados.</p>
+                    <div class="mt-auto space-y-2">
+                        <a href="https://thamirisbezerra-coder.github.io/RastreiosPedidosAM/" target="_blank" class="link-item group border-l-4 border-l-amber-400">
+                            <span class="font-medium text-sm text-slate-700">Portal de Rastreio</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1Lwsx97SijssRttyUjnbseGhVTSXiciXtZ6Acszsi0h8/edit?gid=0#gid=0" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Alimentar Planilha</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1BDqG3mBWAxfUJ1JSrrogOAlRMpfZQQSk04gApLwbMP4/edit?gid=0#gid=0" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
                 </div>
 
-                <!-- Card: Entregas Correios 2025 -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <!-- Acessos Correios -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-yellow-100 text-yellow-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Correios</h3>
                     </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Entregas Correios 2025</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Rastreamento e controle de todas as entregas realizadas via Correios em 2025.</p>
+                    <div class="mt-auto space-y-2">
+                        <a href="https://www.prepostagem.com.br/principal.aspx" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Pré-Postagem (ADM)</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                        <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Rastreamento</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                         <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Busca CEP</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/11ym9HwmfInDSx5-qbyZzl3BvzAlWu5FsSJzutuXGfr4/edit?gid=128693684#gid=128693684" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
+                </div>
+
+                <!-- Pedidos via Transportadora -->
+                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Transp.</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4 px-1">Pedidos enviados por transportadora.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1FaajDpDqyNuhZZJcVDlbvclU8UcqFEzRs4fWoNn9IrI/edit?gid=2073862864#gid=2073862864" target="_blank" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Entregas Correios 2025 -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-teal-100 text-teal-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Entregas 2025</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de entregas Correios.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/11ym9HwmfInDSx5-qbyZzl3BvzAlWu5FsSJzutuXGfr4/edit?gid=128693684#gid=128693684" target="_blank" class="w-full py-2.5 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg hover:bg-teal-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- GRUPO 3: SUPRIMENTOS & COMPRAS -->
+
+                <!-- Acesso Nimbi -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-lime-100 text-lime-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Portal Nimbi</h3>
+                    </div>
+                    
+                    <div class="bg-slate-50 border border-slate-100 p-3 rounded-lg text-xs text-slate-600 mb-4">
+                        <strong class="block text-slate-800 mb-1">Nota:</strong>
+                        Compras de escritório/caixas: avisar quinta-feira.
+                    </div>
+
+                    <div class="mt-auto space-y-2">
+                         <a href="https://login.nimbi.com.br/" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Acessar Portal</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                         <a href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSftGUmiOwcCIxiPf2h3Uej7nhB8YGQDlkUchG1yLN5g-38pSA/formResponse" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Cadastro Fornecedor</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Solicitações de Produtos -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-cyan-100 text-cyan-700 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Solicitações</h3>
+                    </div>
+                    <div class="mt-auto space-y-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1B_7KbOmzXsw9axUAWvj51r-Fkearj-T0ZTpxFThCp24/edit#gid=0" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Matéria Prima</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                         <a href="https://docs.google.com/spreadsheets/d/1uZtgPtTBOF7Goa8_W-8xtShTrK7XUj9BekCsSR-2f-4/edit?gid=1334736234#gid=1334736234" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Material Planta 2</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Controle de Estoque -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-fuchsia-100 text-fuchsia-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Estoque</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-2 px-1">Entrada e saída de materiais.</p>
+                     <div class="bg-yellow-50 text-yellow-800 text-xs p-2 rounded border border-yellow-100 mb-4">
+                        Senha: <strong>AMOSTRAS2025</strong>
+                     </div>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1GoKvZZwdqGzlpGoQDky5Ae6db3jHjPsDq0cRLpDmE6M/edit?gid=452885543#gid=452885543" target="_blank" class="w-full py-2.5 bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold rounded-lg hover:bg-fuchsia-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- GRUPO 4: OPERACIONAL & QUALIDADE -->
+
+                 <!-- Estoque PQs Laboratório -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-purple-100 text-purple-700 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">PQs Laboratório</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4 px-1">Controle de estoque dos PQs.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1iycgtqW3-s9yeJSzZdBKUzqpLiUpyhHniNcM6m8GURs/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-purple-50 text-purple-700 text-sm font-semibold rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Estoque</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Biblioteca Aromas -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-pink-100 text-pink-700 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Biblio. Aromas</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Informações técnicas de aromas.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1vLeTsQrH0DPdtDg0CHgBClkX1l3EIN85QPUZIzUoBG8/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-pink-50 text-pink-700 text-sm font-semibold rounded-lg hover:bg-pink-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Planilha Geral de DAR -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-sky-100 text-sky-700 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Geral de DAR</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Planilha P&D.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1VKuLyWtkvyN4WcTizfd0HAiAdACaG-sItPcmZbhR4Vw/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-sky-50 text-sky-700 text-sm font-semibold rounded-lg hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
+                        </a>
+                    </div>
+                </div>
+
+                 <!-- Programação Spray Dryer -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-gray-100 text-gray-700 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Spray Dryer</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Programação do piloto.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1DyOi4kfcTqWMlqQRI1emZviuhq3edUPIdnOX2pXyXVM/edit?usp=sharing" target="_blank" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Pedidos Entregues (Produção) -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Entregues (Prod)</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Pedidos entregues à produção.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1z2QODpvONZAxU1EwKfLnuOzKdYz6WW-gGoU_DqYxMvg/edit?gid=1212831528#gid=1212831528" target="_blank" class="w-full py-2.5 bg-emerald-50 text-emerald-700 text-sm font-semibold rounded-lg hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- GRUPO 5: OUTROS -->
+
+                <!-- Cola Centro de Custos -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-slate-100 text-slate-600 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Centros de Custo</h3>
+                    </div>
+                     <div class="mt-auto">
+                        <a href="https://thamirisbezerra-coder.github.io/Cola-Centro-de-Custos/" target="_blank" class="w-full py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Cola</span>
+                        </a>
+                    </div>
+                </div>
+
+                 <!-- Criar Lotes Amostras -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-orange-100 text-orange-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Lotes Amostras</h3>
+                    </div>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1xz2bXvRkCWmlR-st-pPFiZZiIIy12BO6rNEF7B98n7A/edit?gid=1513430354#gid=1513430354" target="_blank" class="w-full py-2.5 bg-orange-50 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Criar Lotes</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Controle de Brindes -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-red-100 text-red-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Brindes</h3>
+                    </div>
+                    <div class="mt-auto space-y-2">
+                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGfUfL5srAFd3US76MO1YwnA41ixulH03_2pDR42ciOLR-HA/viewform" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Solicitar</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1atM4u6ieKd0HObhSu5wny0ba2MNUc83slbmlLVvbfHk/edit?gid=1250292262#gid=1250292262" target="_blank" class="link-item group">
+                            <span class="font-medium text-sm text-slate-700">Ver Pedidos</span>
+                            <svg class="w-4 h-4 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                 <!-- Descarte de Produtos -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-gray-200 text-gray-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Descarte</h3>
+                    </div>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1BDqG3mBWAxfUJ1JSrrogOAlRMpfZQQSk04gApLwbMP4/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                 <!-- Bolsas Térmicas -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-blue-100 text-blue-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Bolsas Térmicas</h3>
+                    </div>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1_S93UtnBU9Ex0wPUfJKAgP3PxEDRXBPWdLYVPJy8XJQ/edit" target="_blank" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
+                        </a>
+                    </div>
                 </div>
                 
-                <!-- Card: Estoque PQs Laboratório -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Estoque PQs Laboratório</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Controle de estoque dos PQs do laboratório.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1iycgtqW3-s9yeJSzZdBKUzqpLiUpyhHniNcM6m8GURs/edit?gid=0#gid=0" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Estoque</a>
-                </div>
+                 <!-- ALERTAS -->
 
-                <!-- Card: OTIF - Pedidos Atrasados -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                 <!-- OTIF -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">OTIF Atrasados</h3>
                     </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">OTIF - Pedidos Atrasados</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Controle de pedidos em atraso (On Time In Full).</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1mYIMES3VU0dI0GhM_Ovnc-lpJR5I2n-l_QmsXJXUKvs/edit" target="_blank" class="block w-full text-center bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
-
-                <!-- Card: Pedidos Entregues (Produção) -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Pedidos Entregues (Produção)</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Controle de pedidos entregues para a produção.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1z2QODpvONZAxU1EwKfLnuOzKdYz6WW-gGoU_DqYxMvg/edit?gid=1212831528#gid=1212831528" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
-
-                <!-- Card: Pedidos Enviados dos Segmentos -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                     <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Pedidos Enviados</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acompanhamento de pedidos enviados por segmento.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                         <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">🍰</span><span>Aromas Doce</span></span>
-                         </a>
-                         <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">🥨</span><span>Aromas Salgados</span></span>
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">🥩</span><span>Cárneos</span></span>
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1oN6p-BNH7rFj4n3OKeDXVUFdYBRCbrqC5SUTmShw9Rw/edit?gid=891834841#gid=891834841" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">🧀</span><span>Lácteos</span></span>
-                        </a>
-                         <a href="https://docs.google.com/spreadsheets/d/13azWh7gS4mbWNmJXW9kN1Ull2J54GtdnQ_3fInK3Ss0/edit?gid=765793117#gid=765793117" target="_blank" class="block w-full text-center bg-blue-800 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">💊</span><span>Nutracêuticos</span></span>
-                         </a>
-                         <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" class="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">
-                            <span class="flex items-center justify-center space-x-2"><span class="text-lg">🍦</span><span>Sorvetes</span></span>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1mYIMES3VU0dI0GhM_Ovnc-lpJR5I2n-l_QmsXJXUKvs/edit" target="_blank" class="w-full py-2.5 bg-orange-100 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-200 transition-colors flex items-center justify-center gap-2">
+                             <span>Ver Atrasos</span>
                         </a>
                     </div>
                 </div>
-                
-                <!-- Card: Planilha Geral de DAR -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Planilha Geral de DAR</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesso à Planilha Geral de DAR (planilha P&D).</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1VKuLyWtkvyN4WcTizfd0HAiAdACaG-sItPcmZbhR4Vw/edit?gid=0#gid=0" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
 
-                <!-- Card: Pedidos via Transportadora -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <!-- Bloqueados -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                         </div>
+                        <h3 class="font-bold text-lg text-slate-800">Bloqueados</h3>
                     </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Pedidos via Transportadora</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acompanhamento de pedidos enviados por transportadora.</p>
+                    <p class="text-xs text-slate-500 mb-4 px-1">Vendedores sem feedback.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1dGFxqc83eqlt4dTYAUWZfyGuM4ESKwFVX6jNgqfBIDs/edit?ouid=104248474090636742738&usp=sheets_home&ths=true" target="_blank" class="w-full py-2.5 bg-red-100 text-red-700 text-sm font-semibold rounded-lg hover:bg-red-200 transition-colors flex items-center justify-center gap-2">
+                             <span>Ver Bloqueados</span>
+                        </a>
                     </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1FaajDpDqyNuhZZJcVDlbvclU8UcqFEzRs4fWoNn9IrI/edit?gid=2073862864#gid=2073862864" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
-                
-                <!-- Card: Programação Spray Dryer Piloto -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Programação Spray Dryer Piloto</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesse a planilha de programação do Spray Dryer Piloto.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1DyOi4kfcTqWMlqQRI1emZviuhq3edUPIdnOX2pXyXVM/edit?usp=sharing" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
-                </div>
-
-                <!-- Card: Solicitações de Produtos -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                     <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Solicitações de Produtos</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Acesso rápido aos links de solicitação de materiais e produtos.</p>
-                    </div>
-                    <div class="mt-auto pt-4 space-y-2">
-                         <a href="https://docs.google.com/spreadsheets/d/1B_7KbOmzXsw9axUAWvj51r-Fkearj-T0ZTpxFThCp24/edit#gid=0" target="_blank" class="block w-full text-center bg-blue-800 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-900 transition-colors duration-300">Solicitação de Matéria Prima</a>
-                        <a href="https://docs.google.com/spreadsheets/d/1uZtgPtTBOF7Goa8_W-8xtShTrK7XUj9BekCsSR-2f-4/edit?gid=1334736234#gid=1334736234" target="_blank" class="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300">Solicitação Material Planta 2</a>
-                    </div>
-                </div>
-
-                <!-- Card: Vendedores Bloqueados -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-                    </div>
-                    <div class="flex-grow text-center">
-                        <h3 class="text-xl font-bold mb-2 text-gray-900">Vendedores Bloqueados</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Vendedores bloqueados por falta de respostas nos feedbacks.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1dGFxqc83eqlt4dTYAUWZfyGuM4ESKwFVX6jNgqfBIDs/edit?ouid=104248474090636742738&usp=sheets_home&ths=true" target="_blank" class="block w-full text-center bg-red-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-300 mt-auto pt-4">Acessar Planilha</a>
                 </div>
 
             </main>
 
-            <div id="no-results" class="text-center mt-10 text-gray-500 text-xl hidden">
-                <p>Nenhuma planilha encontrada com este nome.</p>
+             <div id="no-results" class="text-center mt-20 hidden">
+                <div class="inline-block p-4 rounded-full bg-slate-100 text-slate-400 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-medium text-slate-900">Nenhum resultado encontrado</h3>
+                <p class="text-slate-500">Tente buscar com outras palavras-chave.</p>
             </div>
+
         </div>
-    
-        <!-- Rodapé -->
-        <footer class="text-center py-6 mt-8 border-t border-gray-200">
-            <p class="text-gray-500">&copy; 2025 - Setor de Amostras</p>
-            <p class="text-gray-500 mt-2 text-sm">Para adicionar uma nova planilha, contate Thamiris Bezerra.</p>
+
+        <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-slate-500 font-medium">&copy; 2025 - Central de Amostras</p>
+                <p class="text-xs text-slate-400 mt-2">Dúvidas? Contate Thamiris Bezerra.</p>
+            </div>
         </footer>
     </div>
     
-    <!-- MODAIS -->
+    <!-- MODAIS (Mantidos Funcionais) -->
+    
     <!-- Modal do Calendário -->
-    <div id="calendarModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 relative transform transition-all">
+    <div id="calendarModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 relative transform transition-all animate-fade-in-up">
             <div class="flex items-center justify-between mb-6">
-                <button id="prevMonth" class="p-2 rounded-full hover:bg-gray-200"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
-                <h2 id="monthYear" class="text-2xl font-bold text-gray-800"></h2>
-                <button id="nextMonth" class="p-2 rounded-full hover:bg-gray-200"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                <button id="prevMonth" class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <h2 id="monthYear" class="text-2xl font-bold text-slate-800 capitalize"></h2>
+                <button id="nextMonth" class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
             </div>
-            <div class="grid grid-cols-7 gap-1 text-center font-semibold text-gray-600 mb-2">
+            <div class="grid grid-cols-7 gap-1 text-center text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wide">
                 <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
             </div>
             <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
-            <button id="closeCalendarModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+            <button id="closeCalendarModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
     </div>
+    
     <!-- Modal Adicionar Férias -->
-    <div id="addEventModal" class="fixed inset-0 bg-black bg-opacity-50 z-60 flex items-center justify-center p-4 hidden">
+    <div id="addEventModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 transform transition-all">
-            <h3 class="text-xl font-bold mb-4">Adicionar Período de Férias</h3>
+            <h3 class="text-xl font-bold mb-6 text-slate-800">Agendar Férias</h3>
             <div class="space-y-4">
-                <input type="text" id="personName" placeholder="Nome da pessoa" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 <div>
-                    <label for="startDate" class="text-sm text-gray-600">Data de Início</label>
-                    <input type="date" id="startDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Colaborador</label>
+                    <input type="text" id="personName" placeholder="Nome completo" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                 </div>
-                <div>
-                    <label for="endDate" class="text-sm text-gray-600">Data de Fim</label>
-                    <input type="date" id="endDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Início</label>
+                        <input type="date" id="startDate" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Fim</label>
+                        <input type="date" id="endDate" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-end space-x-3 mt-6">
-                <button id="cancelEvent" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Cancelar</button>
-                <button id="saveEvent" class="px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900">Salvar</button>
+            <div class="flex justify-end gap-3 mt-8">
+                <button id="cancelEvent" class="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
+                <button id="saveEvent" class="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 shadow-md shadow-blue-200 transition-all">Confirmar</button>
             </div>
         </div>
     </div>
+
     <!-- Modal Gerir Aniversariantes -->
-     <div id="birthdayModal" class="fixed inset-0 bg-black bg-opacity-50 z-60 flex items-center justify-center p-4 hidden">
+     <div id="birthdayModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 transform transition-all">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Gerenciar Aniversariantes</h3>
-                <button id="closeBirthdayModal" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800">Gerenciar Aniversariantes</h3>
+                <button id="closeBirthdayModal" class="text-slate-400 hover:text-slate-800 text-2xl leading-none">&times;</button>
             </div>
 
-            <div class="bg-gray-50 p-4 rounded-lg mb-4 border">
-                <h4 class="font-semibold mb-2">Adicionar Novo Aniversariante</h4>
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <input type="text" id="birthdayName" placeholder="Nome completo" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500">
-                    <input type="date" id="birthdayDate" title="Data de aniversário" class="w-full sm:w-auto p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500">
-                    <button id="saveBirthday" class="px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900">Adicionar</button>
+            <div class="bg-rose-50 p-5 rounded-xl mb-6 border border-rose-100">
+                <h4 class="font-semibold text-rose-900 text-sm mb-3">Adicionar Novo</h4>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="birthdayName" placeholder="Nome" class="flex-grow p-2.5 bg-white border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
+                    <input type="date" id="birthdayDate" class="p-2.5 bg-white border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
+                    <button id="saveBirthday" class="px-4 py-2.5 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors">Salvar</button>
                 </div>
             </div>
 
-            <div id="birthday-management-list" class="space-y-2 h-64 overflow-y-auto pr-2">
-                <!-- Lista será preenchida pelo JS -->
+            <div id="birthday-management-list" class="space-y-2 h-64 overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Lista via JS -->
             </div>
-        </div>
-    </div>
-    <!-- Modal de Confirmação de Exclusão -->
-    <div id="deleteConfirmModal" class="fixed inset-0 bg-black bg-opacity-70 z-70 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">Confirmar Exclusão</h3>
-            <p id="delete-confirm-message" class="text-gray-600 mb-6">Tem a certeza?</p>
-            <div class="flex justify-center space-x-4">
-                <button id="cancelDelete" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Cancelar</button>
-                <button id="confirmDelete" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Excluir</button>
-            </div>
-        </div>
-    </div>
-    <!-- Modal de Erro -->
-    <div id="errorModal" class="fixed inset-0 bg-black bg-opacity-70 z-80 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center transform transition-all">
-             <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-            </svg>
-            <h3 class="text-2xl font-bold mb-3 text-gray-800">Erro na Operação</h3>
-            <p id="errorMessage" class="text-gray-600 mb-6">Não foi possível completar a ação.</p>
-            <button id="closeErrorModal" class="px-8 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Fechar</button>
         </div>
     </div>
 
+    <!-- Modal de Confirmação -->
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Excluir Item?</h3>
+            <p id="delete-confirm-message" class="text-slate-500 mb-6 text-sm">Essa ação não pode ser desfeita.</p>
+            <div class="flex justify-center gap-3">
+                <button id="cancelDelete" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-colors">Cancelar</button>
+                <button id="confirmDelete" class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 shadow-md shadow-red-200 transition-colors">Sim, Excluir</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Erro -->
+    <div id="errorModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] flex items-center justify-center p-4 hidden">
+         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all">
+             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Ops!</h3>
+            <p id="errorMessage" class="text-slate-500 mb-6 text-sm">Algo deu errado.</p>
+            <button id="closeErrorModal" class="w-full px-5 py-2.5 bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-900 transition-colors">Entendi</button>
+        </div>
+    </div>
+
+    <!-- Script Lógica (Mantido Original) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -543,7 +742,6 @@
             let currentDate = new Date();
             let selectedDate = null;
             
-            // --- ELEMENTOS DO DOM ---
             const clockEl = document.getElementById('clock');
             const weatherEl = document.getElementById('weather');
             const greetingCard = document.getElementById('greeting-card');
@@ -585,7 +783,6 @@
             const errorMessageEl = document.getElementById('errorMessage');
             const closeErrorModalBtn = document.getElementById('closeErrorModal');
 
-            // --- FUNÇÕES GERAIS ---
             function showErrorModal(message) {
                 errorMessageEl.textContent = message;
                 errorModal.classList.remove('hidden');
@@ -596,7 +793,7 @@
                 if (!clockEl) return;
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                clockEl.textContent = `🕒 ${timeString}`;
+                clockEl.textContent = timeString;
             }
             
             async function fetchWeather() {
@@ -612,38 +809,44 @@
                         const temp = Math.round(data.current_weather.temperature);
                         const weatherCode = data.current_weather.weathercode;
                         const weatherInfo = getWeatherInfo(weatherCode);
-                        const minTemp = Math.round(data.daily.temperature_2m_min[0]);
                         const maxTemp = Math.round(data.daily.temperature_2m_max[0]);
-                        const rainProb = data.daily.precipitation_probability_max[0];
-                        let rainInfo = rainProb > 25 ? `<span class="opacity-80 ml-2">| ☔️ ${rainProb}%</span>` : '';
-                        weatherEl.innerHTML = `${weatherInfo.icon} ${temp}°C (Mín: ${minTemp}° / Máx: ${maxTemp}°)${rainInfo}`;
+                         // Mostra apenas ícone e temp atual para ficar clean
+                        weatherEl.innerHTML = `<span class="text-lg">${weatherInfo.icon}</span> <span>${temp}°C</span>`;
                     }
                 } catch (error) {
                     console.error("Erro no clima:", error);
-                    weatherEl.textContent = 'Clima indisponível';
+                    weatherEl.textContent = 'Indisponível';
                 }
             }
 
             function getWeatherInfo(code) {
-                 const map = { 0: { icon: '☀️' }, 1: { icon: '🌤️' }, 2: { icon: '⛅️' }, 3: { icon: '☁️' }, 45: { icon: '🌫️' }, 48: { icon: '🌫️❄️' }, 51: { icon: '🌦️' }, 53: { icon: '🌦️' }, 55: { icon: '🌧️' }, 61: { icon: '🌧️' }, 63: { icon: '🌧️' }, 65: { icon: '🌧️' }, 80: { icon: '🌧️' }, 81: { icon: '🌧️' }, 82: { icon: '⛈️' }, 95: { icon: '⛈️' } };
+                 const map = { 0: { icon: '☀️' }, 1: { icon: '🌤️' }, 2: { icon: '⛅️' }, 3: { icon: '☁️' }, 45: { icon: '🌫️' }, 48: { icon: '🌫️' }, 51: { icon: '🌦️' }, 53: { icon: '🌦️' }, 55: { icon: '🌧️' }, 61: { icon: '🌧️' }, 63: { icon: '🌧️' }, 65: { icon: '🌧️' }, 80: { icon: '🌧️' }, 81: { icon: '🌧️' }, 82: { icon: '⛈️' }, 95: { icon: '⛈️' } };
                 return map[code] || { icon: '😊' };
             }
 
-            // --- LÓGICA DE RENDERIZAÇÃO ---
             function renderGreetingCard() {
                 if (!greetingCard) return;
                 const hour = new Date().getHours();
-                let greeting = '', icon = '', color = '';
-                if (hour >= 5 && hour < 12) { greeting = 'Bom dia, equipe!'; icon = '☀️'; color = 'bg-gradient-to-br from-yellow-300 to-orange-400'; }
-                else if (hour >= 12 && hour < 18) { greeting = 'Boa tarde, equipe!'; icon = '⛅️'; color = 'bg-gradient-to-br from-blue-400 to-indigo-500'; }
-                else { greeting = 'Boa noite, equipe!'; icon = '🌙'; color = 'bg-gradient-to-br from-gray-700 to-gray-900'; }
-                greetingCard.className += ' ' + color;
-                greetingCard.innerHTML = `<div class="text-5xl mb-3">${icon}</div><h3 class="text-2xl font-bold">${greeting}</h3><p class="mt-2 text-sm opacity-90">Tenha um bom trabalho.</p>`;
+                let greeting = '', colorClass = '';
+                if (hour >= 5 && hour < 12) { greeting = 'Bom dia, equipe!'; colorClass = 'bg-gradient-to-br from-amber-400 to-orange-500'; }
+                else if (hour >= 12 && hour < 18) { greeting = 'Boa tarde, equipe!'; colorClass = 'bg-gradient-to-br from-blue-500 to-indigo-600'; }
+                else { greeting = 'Boa noite, equipe!'; colorClass = 'bg-gradient-to-br from-slate-700 to-slate-900'; }
+                
+                // Limpa classes anteriores de cor
+                greetingCard.className = greetingCard.className.replace(/bg-gradient-to-br from-\w+-\d+ to-\w+-\d+/g, '');
+                greetingCard.classList.add(...colorClass.split(' '));
+                
+                greetingCard.innerHTML = `
+                    <div class="absolute right-[-20px] top-[-20px] opacity-10 transform rotate-12 group-hover:scale-110 transition-transform duration-700">
+                        <svg class="w-48 h-48" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-1 relative z-10">${greeting}</h2>
+                    <p class="text-white/90 text-sm relative z-10">Tenha um excelente turno.</p>
+                `;
             }
 
             function renderBirthdays(birthdayData) {
                 if (birthdaySection && birthdayList) {
-                    birthdaySection.style.display = 'flex';
                     const now = new Date();
                     const currentMonth = now.getMonth() + 1;
                     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -652,16 +855,16 @@
 
                     if (birthdaysThisMonth.length > 0) {
                         const sorted = birthdaysThisMonth.sort((a, b) => parseInt(a.birthDate.split('-')[2]) - parseInt(b.birthDate.split('-')[2]));
-                        const names = sorted.map(b => `<strong>${b.name}</strong> (dia ${parseInt(b.birthDate.split('-')[2])})`).join(', ');
-                        birthdayList.innerHTML = `<p class="text-base"><span class="text-xl mr-2">🎂</span> Parabéns aos aniversariantes de ${currentMonthName}: ${names}!</p>`;
+                        const names = sorted.map(b => `<span class="font-semibold">${b.name}</span> (${parseInt(b.birthDate.split('-')[2])})`).join(', ');
+                        birthdayList.innerHTML = `Parabéns em ${currentMonthName}: ${names}!`;
                     } else {
-                        birthdayList.innerHTML = `<p class="text-base text-gray-600"><span class="text-xl mr-2">🎂</span> Nenhum aniversariante em ${currentMonthName}.</p>`;
+                        birthdayList.innerHTML = `Nenhum aniversariante em ${currentMonthName}.`;
                     }
                 }
                 if (birthdayManagementList) {
                     birthdayManagementList.innerHTML = '';
                     if (birthdayData.length === 0) {
-                        birthdayManagementList.innerHTML = '<p class="text-gray-500 text-center">Nenhum aniversariante registado.</p>';
+                        birthdayManagementList.innerHTML = '<p class="text-slate-400 text-center py-4 text-sm">Nenhum registro.</p>';
                         return;
                     }
                     const sortedAll = birthdayData.sort((a, b) => {
@@ -672,9 +875,17 @@
                     sortedAll.forEach(bday => {
                         const [y, m, d] = bday.birthDate.split('-');
                         birthdayManagementList.innerHTML += `
-                            <div class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
-                                <div><span class="font-semibold">${bday.name}</span><span class="text-sm text-gray-600 ml-2">${d}/${m}</span></div>
-                                <button class="delete-btn text-lg px-2" data-id="${bday.id}">&times;</button>
+                            <div class="flex justify-between items-center p-3 bg-white border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">${d}</div>
+                                    <div class="flex flex-col">
+                                        <span class="font-medium text-slate-700 text-sm">${bday.name}</span>
+                                        <span class="text-xs text-slate-400">Mês ${m}</span>
+                                    </div>
+                                </div>
+                                <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${bday.id}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
                             </div>`;
                     });
                 }
@@ -685,7 +896,7 @@
                 calendarGrid.innerHTML = '';
                 const month = currentDate.getMonth();
                 const year = currentDate.getFullYear();
-                monthYearEl.textContent = `${currentDate.toLocaleString('pt-BR', { month: 'long' })} de ${year}`;
+                monthYearEl.textContent = `${currentDate.toLocaleString('pt-BR', { month: 'long' })} ${year}`;
                 const firstDayOfMonth = new Date(year, month, 1).getDay();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -701,31 +912,30 @@
                         return currentDayDateObj >= start && currentDayDateObj <= end;
                     });
                     
-                    let dayClasses = 'bg-gray-100 hover:bg-blue-100';
+                    let dayClasses = 'bg-slate-50 hover:bg-slate-100 text-slate-700';
                     const isToday = currentDayDateObj.toDateString() === new Date().toDateString();
-                    if (isToday) dayClasses = 'bg-blue-800 text-white font-bold';
-                    if (peopleOnVacation.length > 0) dayClasses = `bg-amber-300 ${isToday ? 'text-white' : 'text-gray-900'}`;
+                    if (isToday) dayClasses = 'bg-blue-600 text-white font-bold shadow-md transform scale-105 z-10';
+                    if (peopleOnVacation.length > 0) dayClasses = `bg-amber-100 border border-amber-200 ${isToday ? 'bg-blue-600 text-white border-blue-600' : 'text-amber-900'}`;
                     
-                    let namesHtml = '<div class="text-xs text-left overflow-hidden flex flex-col items-start gap-1 mt-1 w-full">';
+                    let namesHtml = '<div class="flex flex-col gap-0.5 mt-1 w-full px-0.5">';
                     peopleOnVacation.forEach(person => {
-                        const color = nameColors[person.name] || '#e5e7eb';
+                        const color = nameColors[person.name] || '#fbbf24'; 
                         namesHtml += `
-                            <div class="flex items-center font-semibold truncate px-1.5 py-0.5 rounded-full text-gray-800" style="background-color: ${color}">
-                                ${person.name}
-                                <span class="delete-vacation ml-1.5" data-id="${person.id}">&times;</span>
+                            <div class="group flex items-center justify-between text-[10px] px-1 py-0.5 rounded bg-white/80 backdrop-blur-sm shadow-sm truncate">
+                                <span class="truncate">${person.name}</span>
+                                <span class="delete-vacation hidden group-hover:block ml-1 text-red-500 font-bold cursor-pointer" data-id="${person.id}">&times;</span>
                             </div>`;
                     });
                     namesHtml += '</div>';
 
                     calendarGrid.insertAdjacentHTML('beforeend', `
-                        <div class="calendar-day cursor-pointer rounded-lg p-1 min-h-[100px] flex flex-col items-start ${dayClasses} transition-colors" data-date="${dateStr}">
-                            <div class="font-bold">${day}</div>
+                        <div class="calendar-day cursor-pointer rounded-lg p-1 min-h-[80px] flex flex-col items-start ${dayClasses} transition-all border border-transparent hover:border-slate-200" data-date="${dateStr}">
+                            <div class="font-bold text-sm ml-1 mt-1">${day}</div>
                             ${namesHtml}
                         </div>`);
                 }
             }
 
-            // --- EVENT LISTENERS ---
             if(searchInput) {
                 searchInput.addEventListener('keyup', () => {
                     const filter = searchInput.value.toLowerCase();
@@ -736,39 +946,38 @@
                             card.style.display = ""; found = true;
                         } else { card.style.display = "none"; }
                     });
-                    if(noResultsMessage) noResultsMessage.classList.toggle('hidden', !found);
+                    if(noResultsMessage) noResultsMessage.classList.toggle('hidden', found);
                 });
             }
 
-            // Aniversariantes
             if(openBirthdayModalBtn) openBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.remove('hidden'));
             if(closeBirthdayModalBtn) closeBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.add('hidden'));
             if(saveBirthdayBtn) { 
                 saveBirthdayBtn.addEventListener('click', async () => {
                     const name = birthdayNameInput.value.trim();
                     const date = birthdayDateInput.value;
-                    if (!name || !date) { showErrorModal('Por favor, preencha o nome e a data.'); return; }
+                    if (!name || !date) { showErrorModal('Preencha todos os campos.'); return; }
                     
                     saveBirthdayBtn.disabled = true;
-                    saveBirthdayBtn.textContent = 'A adicionar...';
+                    saveBirthdayBtn.textContent = '...';
                     try {
                         await addDoc(collection(db, birthdaysCollectionPath), { name, birthDate: date });
                         birthdayNameInput.value = ''; birthdayDateInput.value = '';
-                    } catch (error) { showErrorModal(`Falha ao adicionar. Erro: ${error.message}`); }
-                    finally { saveBirthdayBtn.disabled = false; saveBirthdayBtn.textContent = 'Adicionar'; }
+                    } catch (error) { showErrorModal(`Erro: ${error.message}`); }
+                    finally { saveBirthdayBtn.disabled = false; saveBirthdayBtn.textContent = 'Salvar'; }
                 });
             }
             if(birthdayManagementList) {
                 birthdayManagementList.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('delete-btn')) {
-                        itemToDelete = { id: e.target.dataset.id, type: 'aniversariante', path: birthdaysCollectionPath };
-                        document.getElementById('delete-confirm-message').textContent = `Tem a certeza de que deseja remover este ${itemToDelete.type}?`;
+                    const btn = e.target.closest('.delete-btn');
+                    if (btn) {
+                        itemToDelete = { id: btn.dataset.id, type: 'aniversariante', path: birthdaysCollectionPath };
+                        document.getElementById('delete-confirm-message').textContent = `Remover este aniversariante?`;
                         deleteConfirmModal.classList.remove('hidden');
                     }
                 });
             }
 
-            // Calendário
             if(openCalendarBtn) openCalendarBtn.addEventListener('click', () => calendarModal.classList.remove('hidden'));
             if(closeCalendarModalBtn) closeCalendarModalBtn.addEventListener('click', () => calendarModal.classList.add('hidden'));
             if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
@@ -778,7 +987,7 @@
                 calendarGrid.addEventListener('click', (e) => {
                     if (e.target.classList.contains('delete-vacation')) {
                         itemToDelete = { id: e.target.dataset.id, type: 'período de férias', path: vacationsCollectionPath };
-                        document.getElementById('delete-confirm-message').textContent = `Tem a certeza de que deseja remover este ${itemToDelete.type}?`;
+                        document.getElementById('delete-confirm-message').textContent = `Remover estas férias?`;
                         deleteConfirmModal.classList.remove('hidden');
                         return;
                     }
@@ -800,19 +1009,17 @@
                     const name = personNameInput.value.trim();
                     const startDate = startDateInput.value;
                     const endDate = endDateInput.value;
-                    if (!name || !startDate || !endDate || endDate < startDate) { showErrorModal('Dados inválidos. Verifique as informações.'); return; }
+                    if (!name || !startDate || !endDate || endDate < startDate) { showErrorModal('Dados inválidos.'); return; }
                     
-                    saveEventBtn.disabled = true; saveEventBtn.textContent = 'A salvar...';
+                    saveEventBtn.disabled = true; saveEventBtn.textContent = '...';
                     try {
                         await addDoc(collection(db, vacationsCollectionPath), { name, startDate, endDate });
                         addEventModal.classList.add('hidden');
-                    } catch (error) { showErrorModal(`Falha ao salvar. Erro: ${error.message}`); }
-                    finally { saveEventBtn.disabled = false; saveEventBtn.textContent = 'Salvar'; }
+                    } catch (error) { showErrorModal(`Erro: ${error.message}`); }
+                    finally { saveEventBtn.disabled = false; saveEventBtn.textContent = 'Confirmar'; }
                 });
             }
 
-
-            // Exclusão
             if(cancelDeleteBtn) {
                 cancelDeleteBtn.addEventListener('click', () => {
                     deleteConfirmModal.classList.add('hidden');
@@ -822,21 +1029,19 @@
             if(confirmDeleteBtn) {
                 confirmDeleteBtn.addEventListener('click', async () => {
                     if (itemToDelete.id && itemToDelete.path) {
-                        confirmDeleteBtn.disabled = true; confirmDeleteBtn.textContent = 'A excluir...';
+                        confirmDeleteBtn.disabled = true; confirmDeleteBtn.textContent = '...';
                         try {
                             await deleteDoc(doc(db, itemToDelete.path, itemToDelete.id));
-                        } catch (error) { showErrorModal(`Falha ao excluir. Erro: ${error.message}`); }
+                        } catch (error) { showErrorModal(`Erro: ${error.message}`); }
                         finally {
                             deleteConfirmModal.classList.add('hidden');
-                            confirmDeleteBtn.disabled = false; confirmDeleteBtn.textContent = 'Excluir';
+                            confirmDeleteBtn.disabled = false; confirmDeleteBtn.textContent = 'Sim, Excluir';
                             itemToDelete = { id: null, type: null, path: null };
                         }
                     }
                 });
             }
 
-
-            // --- INICIALIZAÇÃO ---
             function initializeNonFirebase() {
                 updateClock(); setInterval(updateClock, 1000);
                 fetchWeather();
@@ -864,7 +1069,6 @@
                         : await signInAnonymously(auth);
                     userId = userCredential.user.uid;
 
-                    // Listeners de dados em tempo real
                     onSnapshot(collection(db, birthdaysCollectionPath), (snapshot) => {
                         const birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                         renderBirthdays(birthdayData);
@@ -881,10 +1085,8 @@
                     });
 
                 } catch (error) {
-                    console.error("ERRO GERAL: O Firebase não pôde ser inicializado.", error.message);
-                    showErrorModal("Não foi possível conectar à base de dados. As funcionalidades de calendário e aniversariantes estão desativadas.");
-                    if(openCalendarBtn) openCalendarBtn.disabled = true;
-                    if(openBirthdayModalBtn) openBirthdayModalBtn.disabled = true;
+                    console.error("ERRO GERAL:", error.message);
+                    showErrorModal("Erro de conexão com o banco de dados.");
                 }
             }
             
