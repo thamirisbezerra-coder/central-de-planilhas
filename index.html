@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central de Amostras</title>
+    <!-- PWA Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/76mXWMJh/as-02.png">
+    
     <!-- Incluindo Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonte Inter -->
@@ -83,6 +88,14 @@
 
                 <!-- Info Direita -->
                 <div class="flex items-center gap-4 text-sm font-medium text-slate-600">
+                    <!-- Botão de Instalar (Oculto por padrão) -->
+                    <button id="installBtn" class="hidden bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full shadow-md transition-colors flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Instalar App
+                    </button>
+
                     <div id="weather" class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
                         <span>Carregando...</span>
                     </div>
@@ -994,46 +1007,43 @@
             initializeNonFirebase();
             initializeFirebase();
 
+            // --- LÓGICA PWA (INSTALAÇÃO) ---
+            let deferredPrompt;
+            const installBtn = document.getElementById('installBtn');
+
+            // 1. Registrar o Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registrado', reg))
+                    .catch(err => console.log('Erro no SW', err));
+            }
+
+            // 2. Capturar o evento de instalação
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Previne o Chrome de mostrar o prompt nativo automaticamente
+                e.preventDefault();
+                deferredPrompt = e;
+                // Mostra o nosso botão
+                installBtn.classList.remove('hidden');
+            });
+
+            // 3. Ação do botão
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installBtn.classList.add('hidden');
+            });
+
+            // 4. Se já foi instalado
+            window.addEventListener('appinstalled', () => {
+                installBtn.classList.add('hidden');
+                console.log('PWA was installed');
+            });
+
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
