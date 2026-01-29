@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central de Amostras</title>
-    <!-- PWA Settings -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/76mXWMJh/as-02.png">
-    
     <!-- Incluindo Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonte Inter -->
@@ -88,14 +83,6 @@
 
                 <!-- Info Direita -->
                 <div class="flex items-center gap-4 text-sm font-medium text-slate-600">
-                    <!-- Botão de Instalar (Oculto por padrão) -->
-                    <button id="installBtn" class="hidden bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full shadow-md transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Instalar App
-                    </button>
-
                     <div id="weather" class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
                         <span>Carregando...</span>
                     </div>
@@ -119,30 +106,35 @@
                     </div>
                 </div>
 
-                <!-- Calendário de Ausências (Novo Link) -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
-                            <p class="text-slate-500 text-sm">Férias e faltas da equipe</p>
+                <!-- Calendário de Ausências (Link Externo) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
+                     <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
+                                <p class="text-slate-500 text-sm">Controle de férias e faltas</p>
+                            </div>
+                            <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
                         </div>
-                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
+                        <p class="text-xs text-slate-400 mb-4">Ferramenta importante para o setor.</p>
                     </div>
-                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 z-10">
                         <span>Acessar Calendário</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                 </div>
 
-                <!-- Aniversariantes -->
+                <!-- Aniversariantes (Sistema Interno) -->
                 <div id="birthday-section" class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between mb-2">
                         <div>
                             <h3 class="font-bold text-lg text-rose-900">Aniversariantes</h3>
                             <div id="birthday-list" class="text-rose-700 text-sm mt-1">
-                                <span class="text-rose-400 text-xs">Carregando...</span>
+                                <!-- JS Injects here -->
+                                <span class="opacity-50">Carregando...</span>
                             </div>
                         </div>
                         <div class="p-2 bg-white text-rose-500 rounded-lg shadow-sm">
@@ -401,13 +393,13 @@
                     </div>
                 </div>
 
-                <!-- Controle de Estoque (Planilha Antiga) -->
+                <!-- Controle de Estoque -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-3 bg-fuchsia-100 text-fuchsia-700 rounded-xl">
                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-800">Estoque (Antigo)</h3>
+                        <h3 class="font-bold text-lg text-slate-800">Estoque</h3>
                     </div>
                      <p class="text-xs text-slate-500 mb-2 px-1">Entrada e saída de materiais.</p>
                      <div class="bg-yellow-50 text-yellow-800 text-xs p-2 rounded border border-yellow-100 mb-4">
@@ -416,38 +408,6 @@
                      <div class="mt-auto">
                         <a href="https://docs.google.com/spreadsheets/d/1GoKvZZwdqGzlpGoQDky5Ae6db3jHjPsDq0cRLpDmE6M/edit?gid=452885543#gid=452885543" target="_blank" class="w-full py-2.5 bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold rounded-lg hover:bg-fuchsia-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- NOVO: Controle de Almoxarifado -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="p-3 bg-blue-100 text-blue-700 rounded-xl">
-                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-800">Almoxarifado</h3>
-                    </div>
-                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de Almoxarifado.</p>
-                     <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/ControleAlmoxarifados/" target="_blank" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
-                             <span>Acessar App</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- NOVO: Controle de Estoque Geral -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="p-3 bg-teal-100 text-teal-700 rounded-xl">
-                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-800">Estoque Geral</h3>
-                    </div>
-                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de Estoque Geral.</p>
-                     <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/ControledeEstoque/" target="_blank" class="w-full py-2.5 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg hover:bg-teal-100 transition-colors flex items-center justify-center gap-2">
-                             <span>Acessar App</span>
                         </a>
                     </div>
                 </div>
@@ -466,22 +426,6 @@
                      <div class="mt-auto">
                         <a href="https://docs.google.com/spreadsheets/d/1iycgtqW3-s9yeJSzZdBKUzqpLiUpyhHniNcM6m8GURs/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-purple-50 text-purple-700 text-sm font-semibold rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Estoque</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- NOVO: Controle de Produtos das Salas -->
-                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="p-3 bg-indigo-100 text-indigo-700 rounded-xl">
-                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-800">Produtos Salas</h3>
-                    </div>
-                     <p class="text-xs text-slate-500 mb-4 px-1">Controle produtos das salas.</p>
-                     <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/ControleProdSalas/" target="_blank" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
-                             <span>Acessar App</span>
                         </a>
                     </div>
                 </div>
@@ -546,6 +490,22 @@
                      <div class="mt-auto">
                         <a href="https://docs.google.com/spreadsheets/d/1z2QODpvONZAxU1EwKfLnuOzKdYz6WW-gGoU_DqYxMvg/edit?gid=1212831528#gid=1212831528" target="_blank" class="w-full py-2.5 bg-emerald-50 text-emerald-700 text-sm font-semibold rounded-lg hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Controle de Amostra Padrão (NOVO) -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-indigo-100 text-indigo-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Amostra Padrão</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de amostras padrão.</p>
+                     <div class="mt-auto">
+                        <a href="https://docs.google.com/spreadsheets/d/1zdCuPMptpPc_oHYSfh-Oq0goaMgRa6yOQD7uJJYASQg/edit?gid=749388756#gid=749388756" target="_blank" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar Planilha</span>
                         </a>
                     </div>
                 </div>
@@ -684,7 +644,7 @@
         </footer>
     </div>
     
-    <!-- MODAIS (Aniversariantes e Confirmação apenas) -->
+    <!-- MODAIS (Mantidos Funcionais) -->
     
     <!-- Modal Gerir Aniversariantes -->
      <div id="birthdayModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
@@ -736,6 +696,7 @@
         </div>
     </div>
 
+    <!-- Script Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -748,7 +709,6 @@
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'planilhas-amostras-dev';
             let itemToDelete = { id: null, type: null, path: null };
 
-            // Apenas aniversariantes agora
             const birthdaysCollectionPath = `/artifacts/${appId}/public/data/birthdays`;
 
             const clockEl = document.getElementById('clock');
@@ -803,6 +763,7 @@
                         const temp = Math.round(data.current_weather.temperature);
                         const weatherCode = data.current_weather.weathercode;
                         const weatherInfo = getWeatherInfo(weatherCode);
+                         // Mostra apenas ícone e temp atual para ficar clean
                         weatherEl.innerHTML = `<span class="text-lg">${weatherInfo.icon}</span> <span>${temp}°C</span>`;
                     }
                 } catch (error) {
@@ -824,6 +785,7 @@
                 else if (hour >= 12 && hour < 18) { greeting = 'Boa tarde, equipe!'; colorClass = 'bg-gradient-to-br from-blue-500 to-indigo-600'; }
                 else { greeting = 'Boa noite, equipe!'; colorClass = 'bg-gradient-to-br from-slate-700 to-slate-900'; }
                 
+                // Limpa classes anteriores de cor
                 greetingCard.className = greetingCard.className.replace(/bg-gradient-to-br from-\w+-\d+ to-\w+-\d+/g, '');
                 greetingCard.classList.add(...colorClass.split(' '));
                 
@@ -842,7 +804,14 @@
                     const currentMonth = now.getMonth() + 1;
                     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
                     const currentMonthName = monthNames[now.getMonth()];
-                    const birthdaysThisMonth = birthdayData.filter(b => parseInt(b.birthDate.split('-')[1]) === currentMonth);
+                    
+                    // Validação de dados para evitar erro se birthDate for nulo
+                    const birthdaysThisMonth = birthdayData.filter(b => {
+                        if(!b.birthDate) return false;
+                        const parts = b.birthDate.split('-');
+                        if(parts.length < 2) return false;
+                        return parseInt(parts[1]) === currentMonth;
+                    });
 
                     if (birthdaysThisMonth.length > 0) {
                         const sorted = birthdaysThisMonth.sort((a, b) => parseInt(a.birthDate.split('-')[2]) - parseInt(b.birthDate.split('-')[2]));
@@ -859,12 +828,13 @@
                         return;
                     }
                     const sortedAll = birthdayData.sort((a, b) => {
+                        if(!a.birthDate || !b.birthDate) return 0;
                         const mA = a.birthDate.substring(5, 7); const mB = b.birthDate.substring(5, 7);
                         if (mA !== mB) return mA.localeCompare(mB);
                         return a.birthDate.substring(8, 10).localeCompare(b.birthDate.substring(8, 10));
                     });
                     sortedAll.forEach(bday => {
-                        const [y, m, d] = bday.birthDate.split('-');
+                        const [y, m, d] = bday.birthDate ? bday.birthDate.split('-') : ['','',''];
                         birthdayManagementList.innerHTML += `
                             <div class="flex justify-between items-center p-3 bg-white border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
                                 <div class="flex items-center gap-3">
@@ -898,10 +868,16 @@
 
             if(openBirthdayModalBtn) openBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.remove('hidden'));
             if(closeBirthdayModalBtn) closeBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.add('hidden'));
+            
             if(saveBirthdayBtn) { 
                 saveBirthdayBtn.addEventListener('click', async () => {
                     const name = birthdayNameInput.value.trim();
                     const date = birthdayDateInput.value;
+                    
+                    if (!userId) {
+                        showErrorModal('Aguarde, autenticando no sistema...');
+                        return;
+                    }
                     if (!name || !date) { showErrorModal('Preencha todos os campos.'); return; }
                     
                     saveBirthdayBtn.disabled = true;
@@ -909,7 +885,10 @@
                     try {
                         await addDoc(collection(db, birthdaysCollectionPath), { name, birthDate: date });
                         birthdayNameInput.value = ''; birthdayDateInput.value = '';
-                    } catch (error) { showErrorModal(`Erro: ${error.message}`); }
+                    } catch (error) { 
+                        console.error("Erro ao salvar:", error);
+                        showErrorModal(`Erro: ${error.message || "Permissão negada."}`); 
+                    }
                     finally { saveBirthdayBtn.disabled = false; saveBirthdayBtn.textContent = 'Salvar'; }
                 });
             }
@@ -935,6 +914,7 @@
                     if (itemToDelete.id && itemToDelete.path) {
                         confirmDeleteBtn.disabled = true; confirmDeleteBtn.textContent = '...';
                         try {
+                            if (!userId) throw new Error("Usuário não autenticado.");
                             await deleteDoc(doc(db, itemToDelete.path, itemToDelete.id));
                         } catch (error) { showErrorModal(`Erro: ${error.message}`); }
                         finally {
@@ -968,80 +948,29 @@
                     db = getFirestore(app);
                     auth = getAuth(app);
 
-                    const userCredential = (typeof __initial_auth_token !== 'undefined' && __initial_auth_token)
-                        ? await signInWithCustomToken(auth, __initial_auth_token)
-                        : await signInAnonymously(auth);
+                    // Autenticação robusta antes de qualquer operação
+                    let userCredential;
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        userCredential = await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        userCredential = await signInAnonymously(auth);
+                    }
                     userId = userCredential.user.uid;
 
-                    // Lista fixa de aniversariantes (Fallback/Padrão)
-                    const fallbackBirthdays = [
-                        { id: 'static_1', name: 'Neiva Pereira', birthDate: '2000-01-05' },
-                        { id: 'static_2', name: 'Paula Novais', birthDate: '2000-01-26' },
-                        { id: 'static_3', name: 'Thamiris', birthDate: '2000-02-06' },
-                        { id: 'static_4', name: 'Douglas', birthDate: '2000-06-30' }
-                    ];
-
-                    // Tratamento de erro específico para permissões no onSnapshot
+                    // Só inicia os listeners depois de logado
                     onSnapshot(collection(db, birthdaysCollectionPath), (snapshot) => {
-                        let birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        
-                        // Se o banco estiver vazio, usa a lista fixa
-                        if (birthdayData.length === 0) {
-                            birthdayData = fallbackBirthdays;
-                        }
-                        
+                        const birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                         renderBirthdays(birthdayData);
-                    }, (error) => {
-                        console.error("Erro ao buscar aniversariantes (Usando lista fixa):", error);
-                        // Em caso de erro (permissão), usa a lista fixa para não ficar vazio
-                        renderBirthdays(fallbackBirthdays);
                     });
 
                 } catch (error) {
                     console.error("ERRO GERAL:", error.message);
-                    // Não mostra modal intrusivo na inicialização se for apenas permissão
-                    if(birthdayList) birthdayList.innerHTML = '<span class="text-slate-400 text-xs">Indisponível.</span>';
+                    showErrorModal("Erro de conexão com o banco de dados. Tente recarregar.");
                 }
             }
             
             initializeNonFirebase();
             initializeFirebase();
-
-            // --- LÓGICA PWA (INSTALAÇÃO) ---
-            let deferredPrompt;
-            const installBtn = document.getElementById('installBtn');
-
-            // 1. Registrar o Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker registrado', reg))
-                    .catch(err => console.log('Erro no SW', err));
-            }
-
-            // 2. Capturar o evento de instalação
-            window.addEventListener('beforeinstallprompt', (e) => {
-                // Previne o Chrome de mostrar o prompt nativo automaticamente
-                e.preventDefault();
-                deferredPrompt = e;
-                // Mostra o nosso botão
-                installBtn.classList.remove('hidden');
-            });
-
-            // 3. Ação do botão
-            installBtn.addEventListener('click', async () => {
-                if (!deferredPrompt) return;
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.classList.add('hidden');
-            });
-
-            // 4. Se já foi instalado
-            window.addEventListener('appinstalled', () => {
-                installBtn.classList.add('hidden');
-                console.log('PWA was installed');
-            });
 
         });
     </script>
