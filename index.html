@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central de Amostras</title>
+    <!-- Configurações PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e40af">
+    
     <!-- Incluindo Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonte Inter -->
@@ -106,29 +110,24 @@
                     </div>
                 </div>
 
-                <!-- Calendário de Ausências (LINK EXTERNO) -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden">
-                     <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-4">
-                            <div>
-                                <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
-                                <p class="text-slate-500 text-sm">Controle de férias e faltas</p>
-                            </div>
-                            <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            </div>
+                <!-- Calendário de Ausências (Externo) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
+                            <p class="text-slate-500 text-sm">Férias e faltas da equipe</p>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4">Ferramenta importante para o setor.</p>
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
                     </div>
-                    <!-- Link substituído conforme solicitado -->
-                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 z-10">
+                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
                         <span>Acessar Calendário</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                 </div>
 
-                <!-- Aniversariantes (Sistema Interno com Fallback) -->
+                <!-- Aniversariantes -->
                 <div id="birthday-section" class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between mb-2">
                         <div>
@@ -162,7 +161,7 @@
             <!-- Grid Principal -->
             <main id="spreadsheet-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-                <!-- GRUPO 1: PEDIDOS & VENDAS (Destaque) -->
+                <!-- GRUPO 1: PEDIDOS & VENDAS -->
                 
                 <!-- Planilhas 2026 -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
@@ -205,7 +204,7 @@
                     </div>
                 </div>
 
-                <!-- Pedidos Enviados 2025 -->
+                <!-- Enviados 2025 -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-full -mr-8 -mt-8 z-0"></div>
                      <div class="relative z-10 flex flex-col h-full">
@@ -329,7 +328,7 @@
                     </div>
                 </div>
 
-                <!-- Entregas Correios 2025 -->
+                <!-- Entregas Correios (Externo) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-teal-100 text-teal-600 rounded-xl">
@@ -373,7 +372,7 @@
                     </div>
                 </div>
 
-                <!-- Solicitações Fábrica 3 e Planta 2 (ALTERADO) -->
+                <!-- Solicitações Prod. F3 e P2 -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-cyan-100 text-cyan-700 rounded-xl">
@@ -410,7 +409,7 @@
 
                 <!-- GRUPO 4: OPERACIONAL & QUALIDADE -->
 
-                <!-- LIMS (NOVO CARD) -->
+                <!-- LIMS (NOVO) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-blue-100 text-blue-700 rounded-xl">
@@ -490,7 +489,7 @@
                     </div>
                 </div>
 
-                <!-- Pedidos Entregues (Produção) -->
+                <!-- Entregues (Prod) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
@@ -506,7 +505,7 @@
                     </div>
                 </div>
 
-                <!-- Controle de Amostra Padrão (NOVO) -->
+                <!-- Amostra Padrão (NOVO) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-3 bg-indigo-100 text-indigo-700 rounded-xl">
@@ -588,7 +587,7 @@
                     </div>
                 </div>
 
-                 <!-- Bolsas Térmicas -->
+                 <!-- Bolsas Térmicas (Externo) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-blue-100 text-blue-600 rounded-xl">
@@ -620,7 +619,7 @@
                     </div>
                 </div>
 
-                <!-- Bloqueados -->
+                <!-- Bloqueados (Externo) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-red-50 text-red-600 rounded-xl">
@@ -656,55 +655,17 @@
         </footer>
     </div>
     
-    <!-- MODAIS (Aniversariantes e Confirmação apenas) -->
-    
-    <!-- Modal Gerir Aniversariantes -->
+    <!-- Modal Gerir Aniversariantes (Mantido apenas estrutura para compatibilidade, já que usaremos lista estática) -->
      <div id="birthdayModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 transform transition-all">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold text-slate-800">Gerenciar Aniversariantes</h3>
                 <button id="closeBirthdayModal" class="text-slate-400 hover:text-slate-800 text-2xl leading-none">&times;</button>
             </div>
-
-            <div class="bg-rose-50 p-5 rounded-xl mb-6 border border-rose-100">
-                <h4 class="font-semibold text-rose-900 text-sm mb-3">Adicionar Novo</h4>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <input type="text" id="birthdayName" placeholder="Nome" class="flex-grow p-2.5 bg-white border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
-                    <input type="date" id="birthdayDate" class="p-2.5 bg-white border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none">
-                    <button id="saveBirthday" class="px-4 py-2.5 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors">Salvar</button>
-                </div>
+            <div class="text-center text-slate-500 py-4">
+                <p>O gerenciamento está temporariamente desabilitado.</p>
+                <p class="text-xs mt-2">A lista de aniversariantes é fixa no momento.</p>
             </div>
-
-            <div id="birthday-management-list" class="space-y-2 h-64 overflow-y-auto pr-2 custom-scrollbar">
-                <!-- Lista via JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmação -->
-    <div id="deleteConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            <h3 class="text-lg font-bold text-slate-800 mb-2">Excluir Item?</h3>
-            <p id="delete-confirm-message" class="text-slate-500 mb-6 text-sm">Essa ação não pode ser desfeita.</p>
-            <div class="flex justify-center gap-3">
-                <button id="cancelDelete" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-colors">Cancelar</button>
-                <button id="confirmDelete" class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 shadow-md shadow-red-200 transition-colors">Sim, Excluir</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Erro -->
-    <div id="errorModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] flex items-center justify-center p-4 hidden">
-         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all">
-             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </div>
-            <h3 class="text-lg font-bold text-slate-800 mb-2">Ops!</h3>
-            <p id="errorMessage" class="text-slate-500 mb-6 text-sm">Algo deu errado.</p>
-            <button id="closeErrorModal" class="w-full px-5 py-2.5 bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-900 transition-colors">Entendi</button>
         </div>
     </div>
 
@@ -718,9 +679,8 @@
             let db, auth;
             let userId = null;
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'planilhas-amostras-dev';
-            let itemToDelete = { id: null, type: null, path: null };
-
-            // Apenas aniversariantes agora
+            
+            // Apenas aniversariantes agora (como referência, mas usaremos fallback)
             const birthdaysCollectionPath = `/artifacts/${appId}/public/data/birthdays`;
 
             const clockEl = document.getElementById('clock');
@@ -736,25 +696,8 @@
             const birthdayModal = document.getElementById('birthdayModal');
             const openBirthdayModalBtn = document.getElementById('openBirthdayModalBtn');
             const closeBirthdayModalBtn = document.getElementById('closeBirthdayModal');
-            const birthdayNameInput = document.getElementById('birthdayName');
-            const birthdayDateInput = document.getElementById('birthdayDate');
-            const saveBirthdayBtn = document.getElementById('saveBirthday');
-            const birthdayManagementList = document.getElementById('birthday-management-list');
             
-            // Modais
-            const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-            const confirmDeleteBtn = document.getElementById('confirmDelete');
-            const cancelDeleteBtn = document.getElementById('cancelDelete');
-            const errorModal = document.getElementById('errorModal');
-            const errorMessageEl = document.getElementById('errorMessage');
-            const closeErrorModalBtn = document.getElementById('closeErrorModal');
-
-            function showErrorModal(message) {
-                errorMessageEl.textContent = message;
-                errorModal.classList.remove('hidden');
-            }
-            if(closeErrorModalBtn) closeErrorModalBtn.addEventListener('click', () => errorModal.classList.add('hidden'));
-            
+            // Relógio
              function updateClock() {
                 if (!clockEl) return;
                 const now = new Date();
@@ -762,6 +705,7 @@
                 clockEl.textContent = timeString;
             }
             
+            // Clima
             async function fetchWeather() {
                 if (!weatherEl) return;
                 const lat = -23.4558;
@@ -814,13 +758,7 @@
                     const currentMonth = now.getMonth() + 1;
                     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
                     const currentMonthName = monthNames[now.getMonth()];
-                    
-                    const birthdaysThisMonth = birthdayData.filter(b => {
-                        if(!b.birthDate) return false;
-                        const parts = b.birthDate.split('-');
-                        if(parts.length < 2) return false;
-                        return parseInt(parts[1]) === currentMonth;
-                    });
+                    const birthdaysThisMonth = birthdayData.filter(b => parseInt(b.birthDate.split('-')[1]) === currentMonth);
 
                     if (birthdaysThisMonth.length > 0) {
                         const sorted = birthdaysThisMonth.sort((a, b) => parseInt(a.birthDate.split('-')[2]) - parseInt(b.birthDate.split('-')[2]));
@@ -829,35 +767,6 @@
                     } else {
                         birthdayList.innerHTML = `Nenhum aniversariante em ${currentMonthName}.`;
                     }
-                }
-                if (birthdayManagementList) {
-                    birthdayManagementList.innerHTML = '';
-                    if (birthdayData.length === 0) {
-                        birthdayManagementList.innerHTML = '<p class="text-slate-400 text-center py-4 text-sm">Nenhum registro.</p>';
-                        return;
-                    }
-                    const sortedAll = birthdayData.sort((a, b) => {
-                        if(!a.birthDate || !b.birthDate) return 0;
-                        const mA = a.birthDate.substring(5, 7); const mB = b.birthDate.substring(5, 7);
-                        if (mA !== mB) return mA.localeCompare(mB);
-                        return a.birthDate.substring(8, 10).localeCompare(b.birthDate.substring(8, 10));
-                    });
-                    sortedAll.forEach(bday => {
-                        const [y, m, d] = bday.birthDate ? bday.birthDate.split('-') : ['','',''];
-                        birthdayManagementList.innerHTML += `
-                            <div class="flex justify-between items-center p-3 bg-white border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">${d}</div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-slate-700 text-sm">${bday.name}</span>
-                                        <span class="text-xs text-slate-400">Mês ${m}</span>
-                                    </div>
-                                </div>
-                                <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${bday.id}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </div>`;
-                    });
                 }
             }
 
@@ -877,63 +786,6 @@
 
             if(openBirthdayModalBtn) openBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.remove('hidden'));
             if(closeBirthdayModalBtn) closeBirthdayModalBtn.addEventListener('click', () => birthdayModal.classList.add('hidden'));
-            
-            if(saveBirthdayBtn) { 
-                saveBirthdayBtn.addEventListener('click', async () => {
-                    const name = birthdayNameInput.value.trim();
-                    const date = birthdayDateInput.value;
-                    
-                    if (!userId) {
-                        showErrorModal('Aguarde, autenticando no sistema...');
-                        return;
-                    }
-                    if (!name || !date) { showErrorModal('Preencha todos os campos.'); return; }
-                    
-                    saveBirthdayBtn.disabled = true;
-                    saveBirthdayBtn.textContent = '...';
-                    try {
-                        await addDoc(collection(db, birthdaysCollectionPath), { name, birthDate: date });
-                        birthdayNameInput.value = ''; birthdayDateInput.value = '';
-                    } catch (error) { 
-                        console.error("Erro ao salvar:", error);
-                        showErrorModal(`Erro: ${error.message || "Permissão negada."}`); 
-                    }
-                    finally { saveBirthdayBtn.disabled = false; saveBirthdayBtn.textContent = 'Salvar'; }
-                });
-            }
-            if(birthdayManagementList) {
-                birthdayManagementList.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.delete-btn');
-                    if (btn) {
-                        itemToDelete = { id: btn.dataset.id, type: 'aniversariante', path: birthdaysCollectionPath };
-                        document.getElementById('delete-confirm-message').textContent = `Remover este aniversariante?`;
-                        deleteConfirmModal.classList.remove('hidden');
-                    }
-                });
-            }
-
-            if(cancelDeleteBtn) {
-                cancelDeleteBtn.addEventListener('click', () => {
-                    deleteConfirmModal.classList.add('hidden');
-                    itemToDelete = { id: null, type: null, path: null };
-                });
-            }
-            if(confirmDeleteBtn) {
-                confirmDeleteBtn.addEventListener('click', async () => {
-                    if (itemToDelete.id && itemToDelete.path) {
-                        confirmDeleteBtn.disabled = true; confirmDeleteBtn.textContent = '...';
-                        try {
-                            if (!userId) throw new Error("Usuário não autenticado.");
-                            await deleteDoc(doc(db, itemToDelete.path, itemToDelete.id));
-                        } catch (error) { showErrorModal(`Erro: ${error.message}`); }
-                        finally {
-                            deleteConfirmModal.classList.add('hidden');
-                            confirmDeleteBtn.disabled = false; confirmDeleteBtn.textContent = 'Sim, Excluir';
-                            itemToDelete = { id: null, type: null, path: null };
-                        }
-                    }
-                });
-            }
 
             function initializeNonFirebase() {
                 updateClock(); setInterval(updateClock, 1000);
@@ -957,6 +809,7 @@
                     db = getFirestore(app);
                     auth = getAuth(app);
 
+                    // Autenticação robusta antes de qualquer operação
                     let userCredential;
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         userCredential = await signInWithCustomToken(auth, __initial_auth_token);
@@ -965,7 +818,8 @@
                     }
                     userId = userCredential.user.uid;
 
-                    // Lista fixa de aniversariantes (Fallback/Padrão)
+                    // --- LISTA FIXA DE ANIVERSARIANTES (BACKUP) ---
+                    // Adicionados: Neiva (05/01), Paula (26/01), Thamiris (06/02), Douglas (30/06)
                     const fallbackBirthdays = [
                         { id: 'static_1', name: 'Neiva Pereira', birthDate: '2000-01-05' },
                         { id: 'static_2', name: 'Paula Novais', birthDate: '2000-01-26' },
@@ -973,25 +827,32 @@
                         { id: 'static_4', name: 'Douglas', birthDate: '2000-06-30' }
                     ];
 
-                    // Tratamento de erro específico para permissões no onSnapshot
+                    // Só inicia os listeners depois de logado
                     onSnapshot(collection(db, birthdaysCollectionPath), (snapshot) => {
                         let birthdayData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                         
-                        // Se o banco estiver vazio, usa a lista fixa
+                        // Se não houver dados no banco, usa a lista fixa
                         if (birthdayData.length === 0) {
                             birthdayData = fallbackBirthdays;
                         }
                         
                         renderBirthdays(birthdayData);
                     }, (error) => {
-                        console.error("Erro ao buscar aniversariantes (Usando lista fixa):", error);
-                        // Em caso de erro (permissão), usa a lista fixa para não ficar vazio
+                        console.error("Erro ao carregar aniversariantes (Usando lista fixa):", error);
+                        // Em caso de erro de permissão, mostra a lista fixa
                         renderBirthdays(fallbackBirthdays);
                     });
 
                 } catch (error) {
                     console.error("ERRO GERAL:", error.message);
-                    if(birthdayList) birthdayList.innerHTML = '<span class="text-slate-400 text-xs">Indisponível.</span>';
+                    // Em caso de erro fatal, renderiza a lista fixa
+                    const fallbackBirthdays = [
+                        { id: 'static_1', name: 'Neiva Pereira', birthDate: '2000-01-05' },
+                        { id: 'static_2', name: 'Paula Novais', birthDate: '2000-01-26' },
+                        { id: 'static_3', name: 'Thamiris', birthDate: '2000-02-06' },
+                        { id: 'static_4', name: 'Douglas', birthDate: '2000-06-30' }
+                    ];
+                    renderBirthdays(fallbackBirthdays);
                 }
             }
             
@@ -1000,7 +861,17 @@
 
         });
     </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado!', reg))
+                    .catch(err => console.log('Falha no SW:', err));
+            });
+        }
+    </script>
 </body>
 </html>
+
 
 
