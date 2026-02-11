@@ -59,7 +59,7 @@
             background-color: #ffffff;
             border-color: #e2e8f0;
             transform: translateX(4px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .spreadsheet-card {
             display: flex;
@@ -73,11 +73,11 @@
     <div id="main-content" class="min-h-screen flex flex-col">
         
         <!-- Top Bar / Header Compacto -->
-        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm bg-opacity-90 backdrop-blur-md">
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm bg-opacity-95 backdrop-blur-md transition-all duration-300">
             <div class="container mx-auto px-4 h-20 flex items-center justify-between">
                 <!-- Logo e Título -->
                 <div class="flex items-center gap-4">
-                    <img src="https://i.postimg.cc/76mXWMJh/as-02.png" alt="Logo" class="h-12 w-auto object-contain">
+                    <img src="https://i.postimg.cc/76mXWMJh/as-02.png" alt="Logo" class="h-12 w-auto object-contain hover:scale-105 transition-transform duration-300">
                     <div class="hidden md:block w-px h-8 bg-slate-300"></div>
                     <div>
                         <h1 class="text-xl font-bold text-slate-800 leading-tight">Central de Amostras</h1>
@@ -87,11 +87,11 @@
 
                 <!-- Info Direita -->
                 <div class="flex items-center gap-4 text-sm font-medium text-slate-600">
-                    <div id="weather" class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
+                    <div id="weather" class="hidden md:flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
                         <span>Carregando...</span>
                     </div>
-                    <div id="clock" class="bg-slate-800 text-white px-4 py-1.5 rounded-full shadow-md">
-                        --:--
+                    <div id="clock" class="bg-slate-800 text-white px-4 py-1.5 rounded-full shadow-md flex items-center gap-2">
+                        <span>--:--</span>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                 
                 <!-- Saudação -->
-                <div id="greeting-card" class="rounded-2xl p-6 text-white shadow-lg flex flex-col justify-center items-start relative overflow-hidden group">
+                <div id="greeting-card" class="rounded-2xl p-6 text-white shadow-lg flex flex-col justify-center items-start relative overflow-hidden group hover:shadow-xl transition-shadow duration-300">
                     <!-- Preenchido via JS -->
                     <div class="absolute right-[-20px] top-[-20px] opacity-10 transform rotate-12 group-hover:scale-110 transition-transform duration-700">
                         <svg class="w-48 h-48" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -111,7 +111,7 @@
                 </div>
 
                 <!-- Calendário de Ausências (Externo) -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                     <div class="flex items-start justify-between mb-4">
                         <div>
                             <h3 class="font-bold text-lg text-slate-800">Calendário de Ausências</h3>
@@ -121,26 +121,26 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
                     </div>
-                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+                    <a href="https://thamirisbezerra-coder.github.io/CalendariodeAusencias/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 group">
                         <span>Acessar Calendário</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                 </div>
 
                 <!-- Aniversariantes -->
-                <div id="birthday-section" class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div id="birthday-section" class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 shadow-sm border border-rose-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                     <div class="flex items-start justify-between mb-2">
                         <div>
                             <h3 class="font-bold text-lg text-rose-900">Aniversariantes</h3>
-                            <div id="birthday-list" class="text-rose-700 text-sm mt-1">
-                                <span class="text-rose-400 text-xs">Carregando...</span>
+                            <div id="birthday-list" class="text-rose-700 text-sm mt-1 font-medium">
+                                <span class="text-rose-400 text-xs animate-pulse">Carregando...</span>
                             </div>
                         </div>
                         <div class="p-2 bg-white text-rose-500 rounded-lg shadow-sm">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path></svg>
                         </div>
                     </div>
-                    <button id="openBirthdayModalBtn" class="self-start px-4 py-1.5 bg-white text-rose-600 text-xs font-bold uppercase tracking-wide rounded-full shadow-sm hover:bg-rose-50 transition-colors mt-2">
+                    <button id="openBirthdayModalBtn" class="self-start px-4 py-1.5 bg-white text-rose-600 text-xs font-bold uppercase tracking-wide rounded-full shadow-sm hover:bg-rose-100 transition-colors mt-2">
                         Gerenciar
                     </button>
                 </div>
@@ -176,27 +176,27 @@
                         <p class="text-xs text-slate-500 mb-4 px-1">Links de pedidos para o ano corrente.</p>
                         
                         <div class="mt-auto space-y-2">
-                             <a href="https://docs.google.com/spreadsheets/d/1CS_vhDl23kDEcSknZ9JJL3qnPM01KZdMcfDo6GjbrLM/edit?gid=1763657996#gid=1763657996" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1CS_vhDl23kDEcSknZ9JJL3qnPM01KZdMcfDo6GjbrLM/edit?gid=1763657996#gid=1763657996" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍦</span> Sorvetes</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1yQNc1fxlbtmBjvGeWHR4LsfAc_gl6GDjaRKY2PBhrFA/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1yQNc1fxlbtmBjvGeWHR4LsfAc_gl6GDjaRKY2PBhrFA/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">💊</span> Nutracêuticos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1F4BBYWcXnl0xdfEJ9ESAdW5Bd7tzuVhdAYqybpA75p4/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1F4BBYWcXnl0xdfEJ9ESAdW5Bd7tzuVhdAYqybpA75p4/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🧀</span> Lácteos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1Fcu2lee-t-Ivv3hBVDiPUDH3-DZ41yKd0cmXTjm6Heo/edit?gid=1136753513#gid=1136753513" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1Fcu2lee-t-Ivv3hBVDiPUDH3-DZ41yKd0cmXTjm6Heo/edit?gid=1136753513#gid=1136753513" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥩</span> Cárneos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥨</span> Aromas Salgados</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1_jGSiyTDzB5AVSChHqJ48AuQPQX9vVzFduS_ct0m4ZA/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1_jGSiyTDzB5AVSChHqJ48AuQPQX9vVzFduS_ct0m4ZA/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍰</span> Aromas Doces</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                              </a>
@@ -204,7 +204,7 @@
                     </div>
                 </div>
 
-                <!-- Enviados 2025 -->
+                <!-- Enviados 2025 (Arquivo) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-full -mr-8 -mt-8 z-0"></div>
                      <div class="relative z-10 flex flex-col h-full">
@@ -217,27 +217,27 @@
                          <p class="text-xs text-slate-500 mb-4 px-1">Histórico de pedidos enviados.</p>
                         
                         <div class="mt-auto space-y-2">
-                             <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1SYtu6AO4zQFbjdxSVt5e7rgqFAJqG4VSqQrsZVYsA0c/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍰</span> Aromas Doces</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1cYoNhlnxj8IMAnZDdvwgSW2jsft-OdY8kfmBzcNa61Y/edit?gid=78800743#gid=78800743" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥨</span> Aromas Salgados</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1dI1jt0k_XGnawFpmTWk10zvUlGRjLKP8qIoibsuFGgo/edit?gid=1136753513#gid=1136753513" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🥩</span> Cárneos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1oN6p-BNH7rFj4n3OKeDXVUFdYBRCbrqC5SUTmShw9Rw/edit?gid=891834841#gid=891834841" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1oN6p-BNH7rFj4n3OKeDXVUFdYBRCbrqC5SUTmShw9Rw/edit?gid=891834841#gid=891834841" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🧀</span> Lácteos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/13azWh7gS4mbWNmJXW9kN1Ull2J54GtdnQ_3fInK3Ss0/edit?gid=765793117#gid=765793117" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/13azWh7gS4mbWNmJXW9kN1Ull2J54GtdnQ_3fInK3Ss0/edit?gid=765793117#gid=765793117" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">💊</span> Nutracêuticos</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
-                             <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" class="link-item group">
+                             <a href="https://docs.google.com/spreadsheets/d/1W-zEBvZD7ez6W2UrLp6B8F1n70iTCezz8-IFJJDBHJo/edit?gid=1030966973#gid=1030966973" target="_blank" rel="noopener noreferrer" class="link-item group">
                                 <span class="flex items-center gap-3 font-medium text-sm text-slate-700"><span class="text-xl">🍦</span> Sorvetes</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                              </a>
@@ -255,11 +255,11 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-6 px-1">Gestão de vendedores e feedbacks.</p>
                     <div class="mt-auto space-y-2">
-                        <a href="https://thamirisbezerra-coder.github.io/Painel-Do-Gestor-Feedbacks/" target="_blank" class="link-item group border-l-4 border-l-violet-500">
+                        <a href="https://thamirisbezerra-coder.github.io/Painel-Do-Gestor-Feedbacks/" target="_blank" rel="noopener noreferrer" class="link-item group border-l-4 border-l-violet-500">
                             <span class="font-medium text-sm text-slate-700">Painel de Gestão</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="https://thamirisbezerra-coder.github.io/Tela-do-Vendedor/" target="_blank" class="link-item group">
+                        <a href="https://thamirisbezerra-coder.github.io/Tela-do-Vendedor/" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Painel do Vendedor</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -277,11 +277,11 @@
                         <h3 class="font-bold text-lg text-slate-800">Rastreamento</h3>
                     </div>
                     <div class="mt-auto space-y-2">
-                        <a href="https://thamirisbezerra-coder.github.io/RastreiosPedidosAM/" target="_blank" class="link-item group border-l-4 border-l-amber-400">
+                        <a href="https://thamirisbezerra-coder.github.io/RastreiosPedidosAM/" target="_blank" rel="noopener noreferrer" class="link-item group border-l-4 border-l-amber-400">
                             <span class="font-medium text-sm text-slate-700">Portal de Rastreio</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1Lwsx97SijssRttyUjnbseGhVTSXiciXtZ6Acszsi0h8/edit?gid=0#gid=0" target="_blank" class="link-item group">
+                        <a href="https://docs.google.com/spreadsheets/d/1Lwsx97SijssRttyUjnbseGhVTSXiciXtZ6Acszsi0h8/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Alimentar Planilha</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -297,15 +297,15 @@
                         <h3 class="font-bold text-lg text-slate-800">Correios</h3>
                     </div>
                     <div class="mt-auto space-y-2">
-                        <a href="https://www.prepostagem.com.br/principal.aspx" target="_blank" class="link-item group">
+                        <a href="https://www.prepostagem.com.br/principal.aspx" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Pré-Postagem (ADM)</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
-                        <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" class="link-item group">
+                        <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Rastreamento</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
-                         <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" class="link-item group">
+                         <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Busca CEP</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -322,23 +322,23 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-4 px-1">Pedidos enviados por transportadora.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1FaajDpDqyNuhZZJcVDlbvclU8UcqFEzRs4fWoNn9IrI/edit?gid=2073862864#gid=2073862864" target="_blank" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1FaajDpDqyNuhZZJcVDlbvclU8UcqFEzRs4fWoNn9IrI/edit?gid=2073862864#gid=2073862864" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Entregas Correios (Externo) -->
+                <!-- Entregas Correios (APP) -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-teal-100 text-teal-600 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                          </div>
-                        <h3 class="font-bold text-lg text-slate-800">Entregas 2025</h3>
+                        <h3 class="font-bold text-lg text-slate-800">Entregas Correios</h3>
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Controle de entregas Correios.</p>
                      <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/EntregasCorreios/" target="_blank" class="w-full py-2.5 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg hover:bg-teal-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://thamirisbezerra-coder.github.io/EntregasCorreios/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg hover:bg-teal-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
                         </a>
                     </div>
@@ -361,11 +361,11 @@
                     </div>
 
                     <div class="mt-auto space-y-2">
-                         <a href="https://login.nimbi.com.br/" target="_blank" class="link-item group">
+                         <a href="https://login.nimbi.com.br/" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Acessar Portal</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
-                         <a href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSftGUmiOwcCIxiPf2h3Uej7nhB8YGQDlkUchG1yLN5g-38pSA/formResponse" target="_blank" class="link-item group">
+                         <a href="https://docs.google.com/forms/u/0/d/e/1FAIpQLSftGUmiOwcCIxiPf2h3Uej7nhB8YGQDlkUchG1yLN5g-38pSA/formResponse" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Cadastro Fornecedor</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -381,7 +381,7 @@
                         <h3 class="font-bold text-lg text-slate-800 leading-tight">Solicitações Prod. F3 e P2</h3>
                     </div>
                     <div class="mt-auto space-y-2">
-                         <a href="https://docs.google.com/spreadsheets/d/1uZtgPtTBOF7Goa8_W-8xtShTrK7XUj9BekCsSR-2f-4/edit?gid=1334736234#gid=1334736234" target="_blank" class="link-item group">
+                         <a href="https://docs.google.com/spreadsheets/d/1uZtgPtTBOF7Goa8_W-8xtShTrK7XUj9BekCsSR-2f-4/edit?gid=1334736234#gid=1334736234" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Material Planta 2</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -394,22 +394,38 @@
                         <div class="p-3 bg-fuchsia-100 text-fuchsia-700 rounded-xl">
                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-800">Estoque</h3>
+                        <h3 class="font-bold text-lg text-slate-800">Controle de Estoque</h3>
                     </div>
                      <p class="text-xs text-slate-500 mb-2 px-1">Entrada e saída de materiais.</p>
                      <div class="bg-yellow-50 text-yellow-800 text-xs p-2 rounded border border-yellow-100 mb-4">
                         Senha: <strong>AMOSTRAS2025</strong>
                      </div>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1GoKvZZwdqGzlpGoQDky5Ae6db3jHjPsDq0cRLpDmE6M/edit?gid=452885543#gid=452885543" target="_blank" class="w-full py-2.5 bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold rounded-lg hover:bg-fuchsia-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://thamirisbezerra-coder.github.io/ControledeEstoque/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold rounded-lg hover:bg-fuchsia-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Controle de Almoxarifados -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-orange-100 text-orange-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Controle Almoxarifados</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Gestão de materiais de almoxarifado.</p>
+                     <div class="mt-auto">
+                        <a href="https://thamirisbezerra-coder.github.io/ControleAlmoxarifados/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-orange-50 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- GRUPO 4: OPERACIONAL & QUALIDADE -->
 
-                <!-- LIMS (NOVO) -->
+                <!-- LIMS -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                          <div class="p-3 bg-blue-100 text-blue-700 rounded-xl">
@@ -419,7 +435,7 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Doremus Ultra LIMS.</p>
                      <div class="mt-auto">
-                        <a href="https://doremus.ultralims.com.br/public/cliente/" target="_blank" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://doremus.ultralims.com.br/public/cliente/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Sistema</span>
                         </a>
                     </div>
@@ -435,7 +451,7 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de estoque dos PQs.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1iycgtqW3-s9yeJSzZdBKUzqpLiUpyhHniNcM6m8GURs/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-purple-50 text-purple-700 text-sm font-semibold rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1iycgtqW3-s9yeJSzZdBKUzqpLiUpyhHniNcM6m8GURs/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-purple-50 text-purple-700 text-sm font-semibold rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Estoque</span>
                         </a>
                     </div>
@@ -451,7 +467,7 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Informações técnicas de aromas.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1vLeTsQrH0DPdtDg0CHgBClkX1l3EIN85QPUZIzUoBG8/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-pink-50 text-pink-700 text-sm font-semibold rounded-lg hover:bg-pink-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1vLeTsQrH0DPdtDg0CHgBClkX1l3EIN85QPUZIzUoBG8/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-pink-50 text-pink-700 text-sm font-semibold rounded-lg hover:bg-pink-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar</span>
                         </a>
                     </div>
@@ -467,7 +483,7 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Planilha P&D.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1VKuLyWtkvyN4WcTizfd0HAiAdACaG-sItPcmZbhR4Vw/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-sky-50 text-sky-700 text-sm font-semibold rounded-lg hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1VKuLyWtkvyN4WcTizfd0HAiAdACaG-sItPcmZbhR4Vw/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-sky-50 text-sky-700 text-sm font-semibold rounded-lg hover:bg-sky-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar</span>
                         </a>
                     </div>
@@ -483,7 +499,7 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Programação do piloto.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1DyOi4kfcTqWMlqQRI1emZviuhq3edUPIdnOX2pXyXVM/edit?usp=sharing" target="_blank" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1DyOi4kfcTqWMlqQRI1emZviuhq3edUPIdnOX2pXyXVM/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar</span>
                         </a>
                     </div>
@@ -499,13 +515,13 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Pedidos entregues à produção.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1z2QODpvONZAxU1EwKfLnuOzKdYz6WW-gGoU_DqYxMvg/edit?gid=1212831528#gid=1212831528" target="_blank" class="w-full py-2.5 bg-emerald-50 text-emerald-700 text-sm font-semibold rounded-lg hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1z2QODpvONZAxU1EwKfLnuOzKdYz6WW-gGoU_DqYxMvg/edit?gid=1212831528#gid=1212831528" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-emerald-50 text-emerald-700 text-sm font-semibold rounded-lg hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Amostra Padrão (NOVO) -->
+                <!-- Amostra Padrão -->
                 <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-3 bg-indigo-100 text-indigo-700 rounded-xl">
@@ -515,8 +531,24 @@
                     </div>
                      <p class="text-xs text-slate-500 mb-4 px-1">Controle de amostras padrão.</p>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1zdCuPMptpPc_oHYSfh-Oq0goaMgRa6yOQD7uJJYASQg/edit?gid=749388756#gid=749388756" target="_blank" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1zdCuPMptpPc_oHYSfh-Oq0goaMgRa6yOQD7uJJYASQg/edit?gid=749388756#gid=749388756" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-lg hover:bg-indigo-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Controle Produtos das Salas -->
+                <div class="spreadsheet-card bg-white rounded-xl shadow-sm border border-slate-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-green-100 text-green-700 rounded-xl">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">Produtos das Salas</h3>
+                    </div>
+                     <p class="text-xs text-slate-500 mb-4 px-1">Controle de produtos das salas.</p>
+                     <div class="mt-auto">
+                        <a href="https://thamirisbezerra-coder.github.io/ControleProdSalas/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-green-50 text-green-700 text-sm font-semibold rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center gap-2">
+                             <span>Acessar</span>
                         </a>
                     </div>
                 </div>
@@ -532,7 +564,7 @@
                         <h3 class="font-bold text-lg text-slate-800">Centros de Custo</h3>
                     </div>
                      <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/Cola-Centro-de-Custos/" target="_blank" class="w-full py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://thamirisbezerra-coder.github.io/Cola-Centro-de-Custos/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Cola</span>
                         </a>
                     </div>
@@ -547,7 +579,7 @@
                         <h3 class="font-bold text-lg text-slate-800">Lotes Amostras</h3>
                     </div>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1xz2bXvRkCWmlR-st-pPFiZZiIIy12BO6rNEF7B98n7A/edit?gid=1513430354#gid=1513430354" target="_blank" class="w-full py-2.5 bg-orange-50 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1xz2bXvRkCWmlR-st-pPFiZZiIIy12BO6rNEF7B98n7A/edit?gid=1513430354#gid=1513430354" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-orange-50 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-100 transition-colors flex items-center justify-center gap-2">
                              <span>Criar Lotes</span>
                         </a>
                     </div>
@@ -562,11 +594,11 @@
                         <h3 class="font-bold text-lg text-slate-800">Brindes</h3>
                     </div>
                     <div class="mt-auto space-y-2">
-                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGfUfL5srAFd3US76MO1YwnA41ixulH03_2pDR42ciOLR-HA/viewform" target="_blank" class="link-item group">
+                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGfUfL5srAFd3US76MO1YwnA41ixulH03_2pDR42ciOLR-HA/viewform" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Solicitar</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1atM4u6ieKd0HObhSu5wny0ba2MNUc83slbmlLVvbfHk/edit?gid=1250292262#gid=1250292262" target="_blank" class="link-item group">
+                        <a href="https://docs.google.com/spreadsheets/d/1atM4u6ieKd0HObhSu5wny0ba2MNUc83slbmlLVvbfHk/edit?gid=1250292262#gid=1250292262" target="_blank" rel="noopener noreferrer" class="link-item group">
                             <span class="font-medium text-sm text-slate-700">Ver Pedidos</span>
                             <svg class="w-4 h-4 text-slate-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </a>
@@ -581,7 +613,7 @@
                         <h3 class="font-bold text-lg text-slate-800">Descarte</h3>
                     </div>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1BDqG3mBWAxfUJ1JSrrogOAlRMpfZQQSk04gApLwbMP4/edit?gid=0#gid=0" target="_blank" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1BDqG3mBWAxfUJ1JSrrogOAlRMpfZQQSk04gApLwbMP4/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
                         </a>
                     </div>
@@ -596,7 +628,7 @@
                         <h3 class="font-bold text-lg text-slate-800">Bolsas Térmicas</h3>
                     </div>
                      <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/Controle-Bolsas-T-rmicas/" target="_blank" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://thamirisbezerra-coder.github.io/Controle-Bolsas-T-rmicas/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
                              <span>Acessar Planilha</span>
                         </a>
                     </div>
@@ -613,7 +645,7 @@
                         <h3 class="font-bold text-lg text-slate-800">OTIF Atrasados</h3>
                     </div>
                      <div class="mt-auto">
-                        <a href="https://docs.google.com/spreadsheets/d/1mYIMES3VU0dI0GhM_Ovnc-lpJR5I2n-l_QmsXJXUKvs/edit" target="_blank" class="w-full py-2.5 bg-orange-100 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-200 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1mYIMES3VU0dI0GhM_Ovnc-lpJR5I2n-l_QmsXJXUKvs/edit" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-orange-100 text-orange-700 text-sm font-semibold rounded-lg hover:bg-orange-200 transition-colors flex items-center justify-center gap-2">
                              <span>Ver Atrasos</span>
                         </a>
                     </div>
@@ -629,7 +661,7 @@
                     </div>
                     <p class="text-xs text-slate-500 mb-4 px-1">Vendedores sem feedback.</p>
                      <div class="mt-auto">
-                        <a href="https://thamirisbezerra-coder.github.io/BloqueiosFaltadeFeedback/" target="_blank" class="w-full py-2.5 bg-red-100 text-red-700 text-sm font-semibold rounded-lg hover:bg-red-200 transition-colors flex items-center justify-center gap-2">
+                        <a href="https://thamirisbezerra-coder.github.io/BloqueiosFaltadeFeedback/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-red-100 text-red-700 text-sm font-semibold rounded-lg hover:bg-red-200 transition-colors flex items-center justify-center gap-2">
                              <span>Ver Bloqueados</span>
                         </a>
                     </div>
@@ -649,7 +681,7 @@
 
         <footer class="bg-white border-t border-slate-200 mt-12 py-8">
             <div class="container mx-auto px-4 text-center">
-                <p class="text-slate-500 font-medium">&copy; 2025 - Central de Amostras</p>
+                <p class="text-slate-500 font-medium">&copy; 2026 - Central de Amostras</p>
                 <p class="text-xs text-slate-400 mt-2">Dúvidas? Contate Thamiris Bezerra.</p>
             </div>
         </footer>
@@ -697,12 +729,14 @@
             const openBirthdayModalBtn = document.getElementById('openBirthdayModalBtn');
             const closeBirthdayModalBtn = document.getElementById('closeBirthdayModal');
             
-            // Relógio
+            // Relógio com Data Completa
              function updateClock() {
                 if (!clockEl) return;
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                clockEl.textContent = timeString;
+                const dateString = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
+                // Formato: 14:30 - Qua, 11 Fev
+                clockEl.innerHTML = `<span class="font-bold">${timeString}</span><span class="opacity-75 text-xs border-l border-white/30 pl-2 ml-2">${dateString.replace('.','')}</span>`;
             }
             
             // Clima
@@ -719,7 +753,7 @@
                         const temp = Math.round(data.current_weather.temperature);
                         const weatherCode = data.current_weather.weathercode;
                         const weatherInfo = getWeatherInfo(weatherCode);
-                        weatherEl.innerHTML = `<span class="text-lg">${weatherInfo.icon}</span> <span>${temp}°C</span>`;
+                        weatherEl.innerHTML = `<span class="text-lg mr-1">${weatherInfo.icon}</span> <span class="font-semibold text-slate-700">${temp}°C</span>`;
                     }
                 } catch (error) {
                     console.error("Erro no clima:", error);
@@ -762,8 +796,8 @@
 
                     if (birthdaysThisMonth.length > 0) {
                         const sorted = birthdaysThisMonth.sort((a, b) => parseInt(a.birthDate.split('-')[2]) - parseInt(b.birthDate.split('-')[2]));
-                        const names = sorted.map(b => `<span class="font-semibold">${b.name}</span> (${parseInt(b.birthDate.split('-')[2])})`).join(', ');
-                        birthdayList.innerHTML = `Parabéns em ${currentMonthName}: ${names}!`;
+                        const names = sorted.map(b => `<span class="font-semibold text-rose-700">${b.name}</span> <span class="text-rose-500">(${parseInt(b.birthDate.split('-')[2])})</span>`).join(', ');
+                        birthdayList.innerHTML = `🎉 Parabéns em ${currentMonthName}: ${names}!`;
                     } else {
                         birthdayList.innerHTML = `Nenhum aniversariante em ${currentMonthName}.`;
                     }
@@ -872,6 +906,7 @@
     </script>
 </body>
 </html>
+
 
 
 
